@@ -1,60 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { Menubar } from 'primeng/menubar';
-import { BadgeModule } from 'primeng/badge';
-import { AvatarModule } from 'primeng/avatar';
-import { InputTextModule } from 'primeng/inputtext';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-menu-bar',
   standalone: true,
-  imports: [
-    Menubar,
-    BadgeModule,
-    AvatarModule,
-    InputTextModule,
-    Ripple,
-    CommonModule,
-  ],
+  imports: [CommonModule],
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit {
-  items: MenuItem[] | undefined;
+  isDropdownVisible = false;
 
-  ngOnInit() {
-    this.items = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-      },
-      {
-        label: 'Projects',
-        icon: 'pi pi-search',
-        badge: '3',
-        items: [
-          {
-            label: 'Core',
-            icon: 'pi pi-bolt',
-            shortcut: '⌘+S',
-          },
-          {
-            label: 'Blocks',
-            icon: 'pi pi-server',
-            shortcut: '⌘+B',
-          },
-          {
-            separator: true,
-          },
-          {
-            label: 'UI Kit',
-            icon: 'pi pi-pencil',
-            shortcut: '⌘+U',
-          },
-        ],
-      },
-    ];
+  // Access the button and menu using template references
+  @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;
+  @ViewChild('userMenu', { static: true }) userMenu!: ElementRef;
+
+  toggleDropdown() {
+    this.isDropdownVisible = !this.isDropdownVisible;
   }
+  // Close dropdown on outside click
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: MouseEvent) {
+    const buttonElement = this.userMenuButton.nativeElement;
+    const menuElement = this.userMenu.nativeElement;
+
+    if (
+      !buttonElement.contains(event.target as Node) &&
+      !menuElement.contains(event.target as Node)
+    ) {
+      this.isDropdownVisible = false;
+    }
+  }
+
+  ngOnInit() {}
 }
