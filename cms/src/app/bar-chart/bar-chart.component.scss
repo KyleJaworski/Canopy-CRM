@@ -1,0 +1,6 @@
+canvas {
+  height: 100% !important; /* Forces the canvas to respect the parent height */
+  width: 100% !important; /* Forces the canvas to respect the parent width */
+  display: block;
+  box-sizing: border-box;
+}

@@ -1,5 +1,25 @@
-<div class="mt-10 grid grid-cols-1 gap-6 sm:mt-16 lg:grid-cols-3">
-  <div class="p-px lg:col-span-full">
-    <app-stats [statistics]="customerStats"></app-stats>
+<div class="-mt-1 grid grid-cols-1 gap-6 sm:mt-16 lg:grid-cols-4">
+  <div
+    class="p-px lg:col-span-full rounded-lg bg-white px-7 py-1 shadow sm:px-6 pb-4"
+  >
+    <app-stats
+      [statistics]="customerStats"
+      dataSet="Customer Metrics"
+    ></app-stats>
+  </div>
+  <div
+    class="p-px lg:col-span-1 rounded-lg bg-white px-7 py-1 shadow sm:px-6 pb-4"
+  >
+    <app-doughnut-chart></app-doughnut-chart>
+  </div>
+  <div
+    class="p-px lg:col-span-2 rounded-lg bg-white px-7 py-1 shadow sm:px-6 pb-4"
+  >
+    <app-bar-chart></app-bar-chart>
+  </div>
+  <div
+    class="p-px lg:col-span-1 rounded-lg bg-white px-7 py-1 shadow sm:px-6 pb-4"
+  >
+    <app-customer-list [customers]="customers"></app-customer-list>
   </div>
 </div>
