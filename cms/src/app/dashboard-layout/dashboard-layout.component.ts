@@ -4,6 +4,7 @@ import { DoughnutChartComponent } from '../doughnut-chart/doughnut-chart.compone
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
 import { CustomerListComponent } from '../customer-list/customer-list.component';
 import { Customer } from '../classes/customer';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -12,6 +13,7 @@ import { Customer } from '../classes/customer';
     DoughnutChartComponent,
     BarChartComponent,
     CustomerListComponent,
+    FooterComponent,
   ],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.scss',
