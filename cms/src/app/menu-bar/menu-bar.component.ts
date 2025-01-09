@@ -4,8 +4,11 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MenuItems } from '../classes/menuItems.enum';
 
 @Component({
   selector: 'app-menu-bar',
@@ -15,6 +18,16 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit {
+  menuItems = Object.values(MenuItems); // Get the values of the enum
+
+  @Output() menuOption = new EventEmitter<string>();
+  activeMenuItem = 'Team';
+
+  selectedMenuItem(item: string) {
+    this.menuOption.emit(item); // Emit the value to the parent component
+    this.activeMenuItem = item; // Update the active menu item
+  }
+
   isDropdownVisible = false;
 
   // Access the button and menu using template references
