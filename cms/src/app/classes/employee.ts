@@ -7,7 +7,8 @@ export interface Employee {
   id: number; // Required field
   role: AppRole;
   jobTitle?: string; // Optional field
-  name: string; // Required field
+  firstName: string; // Required field
+  lastName: string;
   email?: string; // Optional field
   phoneNumber?: string; // Optional field
   address?: {
@@ -28,7 +29,9 @@ export class EmployeeFactory {
       id: overrides.id ?? Date.now(), // Default to a timestamp as ID
       role: overrides.role ?? AppRole.User,
       jobTitle: overrides.jobTitle ?? '',
-      name: overrides.name ?? (isAdmin ? 'Admin Employee' : 'User Employee'),
+      firstName:
+        overrides.firstName ?? (isAdmin ? 'Admin Employee' : 'User Employee'),
+      lastName: overrides.lastName ?? '',
       email:
         overrides.email ?? (isAdmin ? 'admin@company.com' : 'user@company.com'),
       phoneNumber: overrides.phoneNumber ?? '',

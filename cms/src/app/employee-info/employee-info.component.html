@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="employeeForm">
   <div class="space-y-12 overflow-y-auto">
     <div class="border-b border-gray-900/10 pb-12">
       <h2 class="text-base/7 font-semibold text-gray-900">
@@ -20,6 +20,7 @@
               type="text"
               name="first-name"
               id="first-name"
+              formControlName="firstName"
               autocomplete="given-name"
               class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             />
@@ -34,6 +35,7 @@
           >
           <div class="mt-2">
             <input
+              formControlName="lastName"
               type="text"
               name="last-name"
               id="last-name"
@@ -49,6 +51,7 @@
           >
           <div class="mt-2">
             <input
+              formControlName="email"
               id="email"
               name="email"
               type="email"
@@ -57,38 +60,6 @@
             />
           </div>
         </div>
-
-        <div class="sm:col-span-3">
-          <label for="country" class="block text-sm/6 font-medium text-gray-900"
-            >Country</label
-          >
-          <div class="mt-2 grid grid-cols-1">
-            <select
-              id="country"
-              name="country"
-              autocomplete="country-name"
-              class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            >
-              <option>United States</option>
-              <option>Canada</option>
-              <option>Mexico</option>
-            </select>
-            <svg
-              class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              aria-hidden="true"
-              data-slot="icon"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-
         <div class="col-span-full">
           <label
             for="street-address"
@@ -97,6 +68,7 @@
           >
           <div class="mt-2">
             <input
+              formControlName="streetAddress"
               type="text"
               name="street-address"
               id="street-address"
@@ -112,6 +84,7 @@
           >
           <div class="mt-2">
             <input
+              formControlName="city"
               type="text"
               name="city"
               id="city"
@@ -120,22 +93,6 @@
             />
           </div>
         </div>
-
-        <div class="sm:col-span-2">
-          <label for="region" class="block text-sm/6 font-medium text-gray-900"
-            >State / Province</label
-          >
-          <div class="mt-2">
-            <input
-              type="text"
-              name="region"
-              id="region"
-              autocomplete="address-level1"
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            />
-          </div>
-        </div>
-
         <div class="sm:col-span-2">
           <label
             for="postal-code"
@@ -144,6 +101,7 @@
           >
           <div class="mt-2">
             <input
+              formControlName="postalCode"
               type="text"
               name="postal-code"
               id="postal-code"

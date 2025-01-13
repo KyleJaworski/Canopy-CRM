@@ -1,5 +1,10 @@
 <ul role="list" class="divide-y divide-gray-100">
-  <li *ngFor="let employee of employees" class="relative py-5 hover:bg-gray-50">
+  <li
+    *ngFor="let employee of employees"
+    class="relative py-5 hover:bg-gray-50"
+    [ngClass]="selectedEmployeeId === employee.id ? 'bg-gray-100' : ''"
+    (click)="onSelectEmployee(employee)"
+  >
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mx-auto flex max-w-4xl justify-between gap-x-6">
         <div class="flex min-w-0 gap-x-4">
@@ -7,7 +12,7 @@
             <p class="text-sm/6 font-semibold text-gray-900">
               <a href="#">
                 <span class="absolute inset-x-0 -top-px bottom-0"></span>
-                {{ employee.name }}
+                {{ employee.firstName }} {{ employee.lastName }}
               </a>
             </p>
             <p class="mt-1 flex text-xs/5 text-gray-500">
