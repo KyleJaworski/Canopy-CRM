@@ -15,6 +15,13 @@
   <div
     class="p-px lg:col-span-3 lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
   >
-    <app-employee-info [employee]="selectedEmployee"></app-employee-info>
+    <app-tab-bar
+      [tabItems]="tabItems"
+      (selectedTab)="handleTabSelection($event)"
+    ></app-tab-bar>
+    <app-employee-info
+      *ngIf="currentTab === 'Contact Information'"
+      [employee]="selectedEmployee"
+    ></app-employee-info>
   </div>
 </div>
