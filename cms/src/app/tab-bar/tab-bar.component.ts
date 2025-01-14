@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { TabItem } from '../classes/tabItems';
 @Component({
   selector: 'app-tab-bar',
   imports: [CommonModule],
@@ -8,21 +8,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './tab-bar.component.scss',
 })
 export class TabBarComponent {
-  @Input() tabItems: string[] = [];
-
-  @Output() selectedTab = new EventEmitter<string>();
-  activeTab: string = 'Contact Information';
+  @Input() tabItems: TabItem[] = [];
+  @Output() selectedTab = new EventEmitter<TabItem>();
 
   onTabChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.activeTab = selectedValue; // Update the local state
-    this.selectedTab.emit(selectedValue); // Emit the value to the parent
-    console.log(selectedValue);
+    const selectedTab = this.tabItems.find(
+      (tab) => tab.label === selectedValue
+    );
+
+    this.selectedTab.emit(selectedTab); // Emit the value to the parent
   }
 
-  selectTab(tabValue: string): void {
-    this.activeTab = tabValue; // Update the local state
-    this.selectedTab.emit(tabValue); // Emit the value to the parent
-    console.log(this.activeTab);
+  selectTab(selectedTab: TabItem): void {
+    this.selectedTab.emit(selectedTab); // Emit the value to the parent
   }
 }

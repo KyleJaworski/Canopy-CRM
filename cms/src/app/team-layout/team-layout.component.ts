@@ -4,6 +4,7 @@ import { EmployeeInfoComponent } from '../employee-info/employee-info.component'
 import { EmployeeFactory, AppRole, Employee } from '../classes/employee';
 import { TabBarComponent } from '../tab-bar/tab-bar.component';
 import { CommonModule } from '@angular/common';
+import { TabItem } from '../classes/tabItems';
 
 @Component({
   selector: 'app-team-layout',
@@ -18,16 +19,28 @@ import { CommonModule } from '@angular/common';
 })
 export class TeamLayoutComponent {
   selectedEmployee?: Employee;
+  addEmployee: Boolean = false;
 
-  tabItems = ['Contact Information', 'Privlidges'];
+  tabItems: TabItem[] = [
+    { label: 'Contact Information', active: true, value: 1, indicator: 0 },
+    { label: 'Privlidges', active: false, value: 2, indicator: 1 },
+  ];
 
-  currentTab: string = 'Contact Information';
-  handleTabSelection(selectedTab: string) {
-    this.currentTab = selectedTab; // Update the current page
+  handleTabSelection(selectedTab: TabItem) {
+    for (let tab of this.tabItems) {
+      tab === selectedTab ? (tab.active = true) : (tab.active = false);
+    }
+  }
+
+  isTabActive(tab: TabItem): boolean {
+    return tab.active === true;
   }
 
   onSelectedEmployeeRecieved(employee: Employee): void {
     this.selectedEmployee = employee;
+  }
+  onAddEmployeeRecieved(add: Boolean): void {
+    this.addEmployee = add;
   }
 
   employees: Employee[] = [];

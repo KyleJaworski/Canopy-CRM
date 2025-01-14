@@ -24,6 +24,7 @@ export class EmployeeInfoComponent implements OnInit, OnChanges {
   employeeForm!: FormGroup;
 
   @Input() employee?: Employee;
+  @Input() addEmployee?: boolean;
 
   constructor(private fb: FormBuilder) {}
 

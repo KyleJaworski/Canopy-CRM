@@ -3,9 +3,11 @@
 >
   <!-- Employee List Container -->
   <div
+    *ngIf="!addEmployee"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
     <app-employee-list
+      (addEmployee)="onAddEmployeeRecieved($event)"
       (selectedEmployee)="onSelectedEmployeeRecieved($event)"
       [employees]="employees"
     ></app-employee-list>
@@ -20,7 +22,7 @@
       (selectedTab)="handleTabSelection($event)"
     ></app-tab-bar>
     <app-employee-info
-      *ngIf="currentTab === 'Contact Information'"
+      *ngIf="tabItems[0].active"
       [employee]="selectedEmployee"
     ></app-employee-info>
   </div>

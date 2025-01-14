@@ -11,11 +11,16 @@ import { EmployeeFactory, AppRole, Employee } from '../classes/employee';
 })
 export class EmployeeListComponent {
   @Input() employees: Employee[] = [];
-
   @Output() selectedEmployee = new EventEmitter<Employee>();
+  @Output() addEmployee = new EventEmitter<Boolean>();
+
   selectedEmployeeId: number = 0;
 
   onSelectEmployee(employee: Employee): void {
     this.selectedEmployee.emit(employee); // Emit the selected employee
+  }
+
+  onAddEmployee(): void {
+    this.addEmployee.emit(true);
   }
 }
