@@ -7,23 +7,22 @@
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
     <app-employee-list
-      (addEmployee)="onAddEmployeeRecieved($event)"
       (selectedEmployee)="onSelectedEmployeeRecieved($event)"
-      [employees]="employees"
     ></app-employee-list>
   </div>
 
   <!-- Employee Info Container -->
   <div
-    class="p-px lg:col-span-3 lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+    class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+    [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
   >
     <app-tab-bar
       [tabItems]="tabItems"
       (selectedTab)="handleTabSelection($event)"
     ></app-tab-bar>
     <app-employee-info
-      *ngIf="tabItems[0].active"
       [employee]="selectedEmployee"
+      *ngIf="tabItems[0].active"
     ></app-employee-info>
   </div>
 </div>

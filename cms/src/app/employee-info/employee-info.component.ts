@@ -12,11 +12,12 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Employee } from '../classes/employee';
+import { Employee } from '../models/employee';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee-info',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './employee-info.component.html',
   styleUrl: './employee-info.component.scss',
 })
@@ -64,5 +65,11 @@ export class EmployeeInfoComponent implements OnInit, OnChanges {
       city: employee?.address?.city || '',
       postalCode: employee?.address?.postalCode || '',
     });
+  }
+
+  onCancel(): void {
+    this.employeeForm.reset();
+    const element = document.querySelector('#form-top'); // Replace with the ID of the element
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }

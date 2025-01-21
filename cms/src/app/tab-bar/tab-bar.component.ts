@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TabItem } from '../classes/tabItems';
+import { TabItem } from '../models/tabItems';
 @Component({
   selector: 'app-tab-bar',
   imports: [CommonModule],

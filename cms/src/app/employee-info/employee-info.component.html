@@ -1,5 +1,5 @@
 <form [formGroup]="employeeForm">
-  <div class="space-y-12 overflow-y-auto">
+  <div class="space-y-12 overflow-y-auto" id="form-top">
     <div class="border-b border-gray-900/10 pb-12">
       <h2 class="text-base/7 font-semibold text-gray-900">
         Personal Information
@@ -12,11 +12,21 @@
         <div class="sm:col-span-3">
           <label
             for="first-name"
-            class="block text-sm/6 font-medium text-gray-900"
+            [ngClass]="
+              employeeForm.get('firstName')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            class="block text-sm/6 font-medium"
             >First name</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('firstName')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               type="text"
               name="first-name"
               id="first-name"
@@ -29,12 +39,22 @@
 
         <div class="sm:col-span-3">
           <label
+            [ngClass]="
+              employeeForm.get('lastName')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
             for="last-name"
             class="block text-sm/6 font-medium text-gray-900"
             >Last name</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('lastName')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               formControlName="lastName"
               type="text"
               name="last-name"
@@ -46,11 +66,23 @@
         </div>
 
         <div class="sm:col-span-4">
-          <label for="email" class="block text-sm/6 font-medium text-gray-900"
+          <label
+            [ngClass]="
+              employeeForm.get('email')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            for="email"
+            class="block text-sm/6 font-medium text-gray-900"
             >Email address</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('email')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               formControlName="email"
               id="email"
               name="email"
@@ -62,12 +94,22 @@
         </div>
         <div class="col-span-full">
           <label
+            [ngClass]="
+              employeeForm.get('streetAddress')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
             for="street-address"
             class="block text-sm/6 font-medium text-gray-900"
             >Street address</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('streetAddress')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               formControlName="streetAddress"
               type="text"
               name="street-address"
@@ -79,11 +121,23 @@
         </div>
 
         <div class="sm:col-span-2 sm:col-start-1">
-          <label for="city" class="block text-sm/6 font-medium text-gray-900"
+          <label
+            [ngClass]="
+              employeeForm.get('city')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            for="city"
+            class="block text-sm/6 font-medium text-gray-900"
             >City</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('city')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               formControlName="city"
               type="text"
               name="city"
@@ -95,12 +149,22 @@
         </div>
         <div class="sm:col-span-2">
           <label
+            [ngClass]="
+              employeeForm.get('postalCode')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
             for="postal-code"
             class="block text-sm/6 font-medium text-gray-900"
             >ZIP / Postal code</label
           >
           <div class="mt-2">
             <input
+              [ngClass]="
+                employeeForm.get('postalCode')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
               formControlName="postalCode"
               type="text"
               name="postal-code"
@@ -308,7 +372,11 @@
   </div>
 
   <div class="mt-6 flex items-center justify-end gap-x-6">
-    <button type="button" class="text-sm/6 font-semibold text-gray-900">
+    <button
+      (click)="onCancel()"
+      type="button"
+      class="text-sm/6 font-semibold text-gray-900"
+    >
       Cancel
     </button>
     <button

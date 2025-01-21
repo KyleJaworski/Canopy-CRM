@@ -1,10 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
 import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
-import { EmployeeFactory, AppRole, Employee } from '../classes/employee';
+import { EmployeeFactory, AppRole, Employee } from '../models/employee';
 import { TabBarComponent } from '../tab-bar/tab-bar.component';
 import { CommonModule } from '@angular/common';
-import { TabItem } from '../classes/tabItems';
+import { TabItem } from '../models/tabItems';
+import { EmployeeService } from '../services/employee/employee.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-layout',
@@ -18,6 +20,8 @@ import { TabItem } from '../classes/tabItems';
   styleUrl: './team-layout.component.scss',
 })
 export class TeamLayoutComponent {
+  constructor(private employeeService: EmployeeService) {}
+
   selectedEmployee?: Employee;
   addEmployee: Boolean = false;
 
@@ -46,28 +50,8 @@ export class TeamLayoutComponent {
   employees: Employee[] = [];
 
   ngOnInit(): void {
-    this.employees.push(
-      EmployeeFactory.createEmployee({
-        id: 1,
-        firstName: 'Jarek',
-        lastName: 'Tree Daddie',
-        jobTitle: 'Team Lead',
-        role: AppRole.Admin,
-        address: {
-          street: '1234 Elm St',
-          city: 'Springfield',
-          postalCode: '12345',
-        },
-      })
-    );
-    this.employees.push(
-      EmployeeFactory.createEmployee({
-        id: 2,
-        firstName: 'Britt',
-        lastName: 'Flourladie',
-        jobTitle: 'Schedular',
-        role: AppRole.User,
-      })
-    );
+    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
+      this.addEmployee = value;
+    });
   }
 }

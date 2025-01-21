@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { AuthenticationService } from './services/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,11 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  constructor(private authService: AuthenticationService) {}
+
+  ngOnInit(): void {
+    this.authService.setMockUserAsActive();
+  }
   title = 'cms';
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Customer } from '../classes/customer';
+import { Customer } from '../models/customer';
 
 @Component({
   selector: 'app-customer-list',

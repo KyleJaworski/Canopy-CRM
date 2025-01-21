@@ -8,7 +8,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuItems } from '../classes/menuItems.enum';
+import { MenuItems } from '../models/menuItems.enum';
 
 @Component({
   selector: 'app-menu-bar',

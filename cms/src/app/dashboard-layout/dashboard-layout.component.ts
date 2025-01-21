@@ -3,7 +3,7 @@ import { StatsComponent } from '../stats/stats.component';
 import { DoughnutChartComponent } from '../doughnut-chart/doughnut-chart.component';
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
 import { CustomerListComponent } from '../customer-list/customer-list.component';
-import { Customer } from '../classes/customer';
+import { Customer } from '../models/customer';
 import { FooterComponent } from '../footer/footer.component';
 
 @Component({
@@ -29,9 +29,9 @@ export class DashboardLayoutComponent {
   customers: Customer[] = [
     {
       id: 1, // Required field
-      name: 'David Jaworski', // Required field
-      email: 'example@gmail.com', // Optional field
-      phoneNumber: '765-605-0530', // Optional field
+      name: 'David Winchester', // Required field
+      email: 'ChesterWin@gmail.com', // Optional field
+      phoneNumber: '765-756-7567', // Optional field
       address: {
         street: '', // Optional nested field
         city: '', // Optional nested field
@@ -41,7 +41,7 @@ export class DashboardLayoutComponent {
     },
     {
       id: 2, // Required field
-      name: 'Haley Pillion', // Required field
+      name: 'Haley Marie', // Required field
       email: 'pjillion@gmail.com', // Optional field
       phoneNumber: '765-598-7157', // Optional field
       address: {

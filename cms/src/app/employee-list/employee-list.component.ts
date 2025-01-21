@@ -1,6 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmployeeFactory, AppRole, Employee } from '../classes/employee';
+import { Employee } from '../models/employee';
+import { EmployeeService } from '../services/employee/employee.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-employee-list',
@@ -9,10 +12,22 @@ import { EmployeeFactory, AppRole, Employee } from '../classes/employee';
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.scss',
 })
-export class EmployeeListComponent {
-  @Input() employees: Employee[] = [];
+export class EmployeeListComponent implements OnInit {
+  constructor(
+    private employeeService: EmployeeService,
+    private authenticationService: AuthenticationService
+  ) {}
+
   @Output() selectedEmployee = new EventEmitter<Employee>();
-  @Output() addEmployee = new EventEmitter<Boolean>();
+
+  loggedInUser!: User;
+  employees: Employee[] = [];
+
+  ngOnInit(): void {
+    this.employees = this.employeeService.getMockusers();
+    this.loggedInUser = this.authenticationService.getUser()!;
+    console.log('hello');
+  }
 
   selectedEmployeeId: number = 0;
 
@@ -20,7 +35,8 @@ export class EmployeeListComponent {
     this.selectedEmployee.emit(employee); // Emit the selected employee
   }
 
-  onAddEmployee(): void {
-    this.addEmployee.emit(true);
+  toggleAddEmployee(): void {
+    const current = this.employeeService.getAddEmployee();
+    this.employeeService.setAddEmployee(!current); // Toggle the value
   }
 }
