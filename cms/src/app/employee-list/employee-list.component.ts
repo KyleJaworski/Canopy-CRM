@@ -13,30 +13,37 @@ import { User } from '../models/user';
   styleUrl: './employee-list.component.scss',
 })
 export class EmployeeListComponent implements OnInit {
+  @Output() selectedEmployee = new EventEmitter<Employee>();
+
+  addEmployee!: Boolean;
+  loggedInUser!: User;
+  employees: Employee[] = [];
+  selectedEmployeeId: number = 0;
+
   constructor(
     private employeeService: EmployeeService,
     private authenticationService: AuthenticationService
   ) {}
 
-  @Output() selectedEmployee = new EventEmitter<Employee>();
-
-  loggedInUser!: User;
-  employees: Employee[] = [];
-
   ngOnInit(): void {
-    this.employees = this.employeeService.getMockusers();
     this.loggedInUser = this.authenticationService.getUser()!;
-    console.log('hello');
-  }
 
-  selectedEmployeeId: number = 0;
+    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
+      this.addEmployee = value;
+    });
+
+    this.employeeService.mockEmployees$.subscribe((employees) => {
+      this.employees = employees;
+    });
+  }
 
   onSelectEmployee(employee: Employee): void {
     this.selectedEmployee.emit(employee); // Emit the selected employee
+    this.selectedEmployeeId = employee.id;
   }
 
   toggleAddEmployee(): void {
-    const current = this.employeeService.getAddEmployee();
-    this.employeeService.setAddEmployee(!current); // Toggle the value
+    this.selectedEmployeeId = 0;
+    this.employeeService.flipAddEmployee(); // Toggle the value
   }
 }

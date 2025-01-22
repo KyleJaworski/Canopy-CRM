@@ -1,4 +1,4 @@
-<form [formGroup]="employeeForm">
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
   <div class="space-y-12 overflow-y-auto" id="form-top">
     <div class="border-b border-gray-900/10 pb-12">
       <h2 class="text-base/7 font-semibold text-gray-900">
@@ -92,6 +92,36 @@
             />
           </div>
         </div>
+        <div class="sm:col-span-2">
+          <label
+            [ngClass]="
+              employeeForm.get('phoneNumber')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            for="phoneNumber"
+            class="block text-sm/6 font-medium text-gray-900"
+            >Phone Number</label
+          >
+          <div class="mt-2">
+            <input
+              [ngClass]="
+                employeeForm.get('phoneNumber')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
+              formControlName="phoneNumber"
+              id="phoneNumber"
+              name="phoneNumber"
+              type="phoneNumber"
+              autocomplete="phoneNumber"
+              (input)="onPhoneInput($event)"
+              placeholder="###-###-####"
+              maxlength="12"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
+          </div>
+        </div>
         <div class="col-span-full">
           <label
             [ngClass]="
@@ -170,6 +200,7 @@
               name="postal-code"
               id="postal-code"
               autocomplete="postal-code"
+              maxlength="5"
               class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             />
           </div>
@@ -375,13 +406,18 @@
     <button
       (click)="onCancel()"
       type="button"
-      class="text-sm/6 font-semibold text-gray-900"
+      class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
     >
       Cancel
     </button>
     <button
       type="submit"
-      class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      [ngClass]="
+        employeeForm.invalid
+          ? 'bg-indigo-400'
+          : 'bg-indigo-600 hover:bg-indigo-500'
+      "
+      class="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
     >
       Save
     </button>

@@ -10,7 +10,7 @@ export interface Employee {
   firstName: string; // Required field
   lastName: string;
   email?: string; // Optional field
-  phoneNumber?: string; // Optional field
+  phoneNumber: string; // Optional field
   address?: {
     street?: string; // Optional nested field
     city?: string; // Optional nested field

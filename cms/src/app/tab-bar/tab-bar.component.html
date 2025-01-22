@@ -1,4 +1,5 @@
 <div>
+  <!-- Tab Selection for Mobile/Small Screen-->
   <div class="grid grid-cols-1 sm:hidden">
     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
     <select
@@ -28,16 +29,17 @@
       />
     </svg>
   </div>
+  <!--  Tab Menu for desktop/large screen-->
   <div class="hidden sm:block">
     <div class="border-b border-gray-200 sticky">
-      <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-        <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700" -->
+      <nav class="flex space-x-8 -mb-px items-center" aria-label="Tabs">
+        <!-- Tab Items -->
         <a
           *ngFor="let tab of tabItems"
           href="#"
           [ngClass]="
             tab.active === true
-              ? ' border-indigo-500  text-indigo-600'
+              ? 'border-indigo-500 text-indigo-600'
               : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700'
           "
           class="flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium"
@@ -49,13 +51,27 @@
             class="ml-3 hidden rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-900 md:inline-block"
             [ngClass]="
               tab.active === true
-                ? ' bg-indigo-100  text-indigo-600 '
-                : ' bg-gray-100 text-gray-900'
+                ? 'bg-indigo-100 text-indigo-600'
+                : 'bg-gray-100 text-gray-900'
             "
-            class="ml-3 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block"
-            >{{ tab.indicator }}</span
           >
+            {{ tab.indicator }}
+          </span>
         </a>
+        <a
+          *ngIf="addEmployee"
+          href="#"
+          class="flex whitespace-nowrap border-l-2 px-1 py-4 border-gray-200"
+        >
+        </a>
+        <button
+          *ngIf="addEmployee"
+          type="button"
+          (click)="cancelAdd()"
+          class="rounded-full bg-red-500 px-3 mr-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Cancel
+        </button>
       </nav>
     </div>
   </div>

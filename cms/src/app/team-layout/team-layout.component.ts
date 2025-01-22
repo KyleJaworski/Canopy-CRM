@@ -20,15 +20,24 @@ import { Subscription } from 'rxjs';
   styleUrl: './team-layout.component.scss',
 })
 export class TeamLayoutComponent {
-  constructor(private employeeService: EmployeeService) {}
-
-  selectedEmployee?: Employee;
+  selectedEmployee?: Employee | null = null;
   addEmployee: Boolean = false;
+  employees: Employee[] = [];
 
   tabItems: TabItem[] = [
     { label: 'Contact Information', active: true, value: 1, indicator: 0 },
     { label: 'Privlidges', active: false, value: 2, indicator: 1 },
   ];
+
+  constructor(private employeeService: EmployeeService) {}
+
+  ngOnInit(): void {
+    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
+      this.selectedEmployee = null;
+
+      this.addEmployee = value;
+    });
+  }
 
   handleTabSelection(selectedTab: TabItem) {
     for (let tab of this.tabItems) {
@@ -45,13 +54,5 @@ export class TeamLayoutComponent {
   }
   onAddEmployeeRecieved(add: Boolean): void {
     this.addEmployee = add;
-  }
-
-  employees: Employee[] = [];
-
-  ngOnInit(): void {
-    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
-      this.addEmployee = value;
-    });
   }
 }
