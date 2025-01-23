@@ -38,8 +38,11 @@ export class EmployeeListComponent implements OnInit {
   }
 
   onSelectEmployee(employee: Employee): void {
+    this.selectedEmployeeId == employee.employeeId
+      ? (this.selectedEmployeeId = 0)
+      : (this.selectedEmployeeId = employee.employeeId);
+
     this.selectedEmployee.emit(employee); // Emit the selected employee
-    this.selectedEmployeeId = employee.id;
   }
 
   toggleAddEmployee(): void {

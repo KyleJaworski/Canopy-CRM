@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
 import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
-import { EmployeeFactory, AppRole, Employee } from '../models/employee';
+import { Employee } from '../models/employee';
 import { TabBarComponent } from '../tab-bar/tab-bar.component';
 import { CommonModule } from '@angular/common';
 import { TabItem } from '../models/tabItems';
 import { EmployeeService } from '../services/employee/employee.service';
+import { EmployeesOverviewComponent } from '../employees-overview/employees-overview.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs';
     EmployeeInfoComponent,
     TabBarComponent,
     CommonModule,
+    EmployeesOverviewComponent,
   ],
   templateUrl: './team-layout.component.html',
   styleUrl: './team-layout.component.scss',
@@ -50,7 +52,9 @@ export class TeamLayoutComponent {
   }
 
   onSelectedEmployeeRecieved(employee: Employee): void {
-    this.selectedEmployee = employee;
+    this.selectedEmployee == employee
+      ? (this.selectedEmployee = null)
+      : (this.selectedEmployee = employee);
   }
   onAddEmployeeRecieved(add: Boolean): void {
     this.addEmployee = add;

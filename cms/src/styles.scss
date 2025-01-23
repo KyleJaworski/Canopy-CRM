@@ -2,3 +2,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Override PrimeNG Dropdown Styling */
+::ng-deep .p-dropdown {
+  @apply block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6;
+}
+
+::ng-deep .p-dropdown-trigger {
+  @apply hidden; /* Hides the default dropdown arrow */
+}
+
+::ng-deep .p-dropdown-label {
+  @apply text-gray-900 bg-white w-full; /* Makes the label match the text input field */
+}
+
+::ng-deep .p-dropdown-panel {
+  @apply bg-white rounded-md shadow-lg; /* Ensures the dropdown panel is styled with Tailwind */
+}

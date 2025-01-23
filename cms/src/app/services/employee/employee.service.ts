@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Employee, AppRole } from '../../models/employee';
+import { Employee, TeamRole } from '../../models/employee';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,7 @@ export class EmployeeService {
     const currentEmployees = this.mockEmployeesSubject.value; // Get the current value of mockEmployees
 
     const index = currentEmployees.findIndex(
-      (emp) => emp.id === employeeToUpdate.id
+      (emp) => emp.employeeId === employeeToUpdate.employeeId
     );
 
     if (index !== -1) {
@@ -77,7 +77,7 @@ export class EmployeeService {
 
   generateUniqueEmployeeId(): number {
     const currentEmployees = this.getMockEmployees(); // Get current employees
-    const existingIds = new Set(currentEmployees.map((emp) => emp.id)); // Store all existing IDs in a Set
+    const existingIds = new Set(currentEmployees.map((emp) => emp.employeeId)); // Store all existing IDs in a Set
 
     let newId: number;
 
@@ -93,11 +93,11 @@ export class EmployeeService {
   private getDefaultMockEmployees(): Employee[] {
     return [
       {
-        id: 1,
+        employeeId: 1,
         firstName: 'Jarek',
         lastName: 'Tree Daddie',
-        jobTitle: 'Team Lead',
-        role: AppRole.Admin,
+        jobTitle: 'CEO',
+        teamRole: TeamRole.Executive,
         email: 'jarekbobarek@treedaddies.com',
         phoneNumber: '765-458-7519',
         address: {
@@ -107,11 +107,12 @@ export class EmployeeService {
         },
       },
       {
-        id: 2,
+        employeeId: 2,
+        directReportId: 1,
         firstName: 'Britt',
         lastName: 'Flourladie',
         jobTitle: 'Schedular',
-        role: AppRole.User,
+        teamRole: TeamRole.Coordinator,
         email: 'info@treedaddies.com',
         phoneNumber: '465-754-7958',
         address: {

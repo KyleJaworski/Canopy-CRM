@@ -205,6 +205,60 @@
             />
           </div>
         </div>
+        <!--Job Title and Team Role-->
+        <div class="sm:col-span-2 sm:col-start-1">
+          <label
+            [ngClass]="
+              employeeForm.get('jobTitle')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            for="jobTitle"
+            class="block text-sm/6 font-medium text-gray-900"
+            >Job Title</label
+          >
+          <div class="mt-2">
+            <input
+              [ngClass]="
+                employeeForm.get('jobTitle')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
+              formControlName="jobTitle"
+              type="text"
+              name="jobTitle"
+              id="jobTitle"
+              autocomplete="address-level2"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
+          </div>
+        </div>
+        <div class="sm:col-span-2">
+          <label
+            [ngClass]="
+              employeeForm.get('directReportId')?.invalid
+                ? 'text-red-500'
+                : 'text-gray-900'
+            "
+            for="directReportId"
+            class="block text-sm/6 font-medium text-gray-900"
+            >Direct Report</label
+          >
+          <div class="mt-2">
+            <p-select
+              [ngClass]="
+                employeeForm.get('directReportId')?.invalid
+                  ? 'outline-red-500'
+                  : 'outline-gray-300'
+              "
+              formControlName="directReportId"
+              [options]="directReports"
+              optionLabel="name"
+              optionValue="code"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -412,6 +466,7 @@
     </button>
     <button
       type="submit"
+      [disabled]="employeeForm.invalid"
       [ngClass]="
         employeeForm.invalid
           ? 'bg-indigo-400'

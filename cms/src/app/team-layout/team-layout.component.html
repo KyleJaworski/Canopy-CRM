@@ -11,8 +11,15 @@
     ></app-employee-list>
   </div>
 
+  <!--Employee Statistics-->
+  <app-employees-overview
+    class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+    *ngIf="selectedEmployee == null && addEmployee == false"
+  ></app-employees-overview>
+
   <!-- Employee Info Container -->
   <div
+    *ngIf="selectedEmployee || addEmployee"
     class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
     [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
   >

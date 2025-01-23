@@ -12,7 +12,7 @@
   <li
     *ngFor="let employee of employees"
     class="relative py-5 hover:bg-gray-50"
-    [ngClass]="selectedEmployeeId === employee.id ? 'bg-gray-100' : ''"
+    [ngClass]="selectedEmployeeId === employee.employeeId ? 'bg-gray-100' : ''"
     (click)="onSelectEmployee(employee)"
   >
     <div class="px-4 sm:px-6 lg:px-8">
