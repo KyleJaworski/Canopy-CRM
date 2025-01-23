@@ -1,6 +1,7 @@
 export interface Customer {
-  id: number; // Required field
-  name: string; // Required field
+  customerId: number; // Required field
+  firstName: string; // Required field
+  lastName?: string; // Required field
   email?: string; // Optional field
   phoneNumber?: string; // Optional field
   address?: {
@@ -15,8 +16,9 @@ export interface Customer {
 export class CustomerFactory {
   static createCustomer(overrides: Partial<Customer> = {}): Customer {
     return {
-      id: overrides.id ?? Date.now(), // Default to a timestamp as ID
-      name: overrides.name ?? 'Unknown Customer',
+      customerId: overrides.customerId ?? Date.now(), // Default to a timestamp as ID
+      firstName: overrides.firstName ?? 'Unknown Customer',
+      lastName: overrides.lastName ?? '',
       email: overrides.email ?? '',
       phoneNumber: overrides.phoneNumber ?? '',
       address: overrides.address ?? {

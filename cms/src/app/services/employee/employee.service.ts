@@ -94,6 +94,7 @@ export class EmployeeService {
     return [
       {
         employeeId: 1,
+        directReportId: null,
         firstName: 'Jarek',
         lastName: 'Tree Daddie',
         jobTitle: 'CEO',

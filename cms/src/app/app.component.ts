@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { MainLayoutComponent } from './mainComponents/main-layout/main-layout.component';
 import { AuthenticationService } from './services/authentication/authentication.service';
 
 @Component({

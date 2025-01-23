@@ -8,7 +8,7 @@ export enum TeamRole {
 
 export interface Employee {
   employeeId: number; // Required field
-  directReportId?: number;
+  directReportId?: number | null;
   teamRole: TeamRole;
   jobTitle: string; // Optional field
   firstName: string; // Required field
