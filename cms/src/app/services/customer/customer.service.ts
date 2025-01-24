@@ -118,6 +118,30 @@ export class CustomerService {
           postalCode: '43211',
         },
       },
+      {
+        customerId: 3,
+        firstName: 'Leonard',
+        lastName: 'Lauter',
+        email: 'no@gmail.com',
+        phoneNumber: '465-754-7958',
+        address: {
+          street: '23542 harrow road',
+          city: 'Lafayette',
+          postalCode: '43211',
+        },
+      },
+      {
+        customerId: 4,
+        firstName: 'Ali',
+        lastName: 'Lauter',
+        email: 'no@gmail.com',
+        phoneNumber: '465-754-7958',
+        address: {
+          street: '23542 harrow road',
+          city: 'Lafayette',
+          postalCode: '43211',
+        },
+      },
     ];
   }
 }

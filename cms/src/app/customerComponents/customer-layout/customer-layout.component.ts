@@ -1,13 +1,14 @@
-import { PersonListComponent } from '../../person-list/person-list.component';
+import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Customer } from '../../models/customer';
 import { CustomerService } from '../../services/customer/customer.service';
 import { ListItem, ObjectType, updateListItems } from '../../models/listItem';
+import { CustomersOverviewComponent } from '../customers-overview/customers-overview.component';
 
 @Component({
   selector: 'app-customer-layout',
-  imports: [PersonListComponent, CommonModule],
+  imports: [PersonListComponent, CommonModule, CustomersOverviewComponent],
   standalone: true,
   templateUrl: './customer-layout.component.html',
   styleUrl: './customer-layout.component.scss',

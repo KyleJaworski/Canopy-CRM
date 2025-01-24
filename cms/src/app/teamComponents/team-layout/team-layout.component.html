@@ -12,11 +12,13 @@
     ></app-person-list>
   </div>
 
-  <!--Employee Statistics-->
-  <app-employees-overview
+  <!--Employee Org-->
+  <div
     class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
     *ngIf="selectedEmployee == null && addEmployee == false"
-  ></app-employees-overview>
+  >
+    <app-employees-overview></app-employees-overview>
+  </div>
 
   <!-- Employee Info Container -->
   <div
@@ -26,6 +28,7 @@
   >
     <app-tab-bar
       [tabItems]="tabItems"
+      [objectType]="objectType"
       (selectedTab)="handleTabSelection($event)"
     ></app-tab-bar>
     <app-employee-info

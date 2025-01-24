@@ -59,15 +59,15 @@
           </span>
         </a>
         <a
-          *ngIf="addEmployee"
+          *ngIf="addObject"
           href="#"
           class="flex whitespace-nowrap border-l-2 px-1 py-4 border-gray-200"
         >
         </a>
         <button
-          *ngIf="addEmployee"
+          *ngIf="addObject"
           type="button"
-          (click)="cancelAdd()"
+          (click)="cancelAdd(objectType)"
           class="relative inline-flex items-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Cancel

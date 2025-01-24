@@ -1,14 +1,12 @@
 import {
   Component,
   Input,
-  OnChanges,
   ChangeDetectionStrategy,
   Output,
   EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ListItem } from '../models/listItem';
+import { ListItem } from '../../models/listItem';
 
 @Component({
   selector: 'app-person-list',
