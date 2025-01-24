@@ -19,7 +19,9 @@ import { ListItem } from '../models/listItem';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonListComponent {
+  //Takes in preformated ListItem[]
   @Input() listItems: ListItem[] = [];
+  //Outputs selected item back to parent
   @Output() selectedlistItem = new EventEmitter<ListItem>();
 
   selectedItemId!: number;

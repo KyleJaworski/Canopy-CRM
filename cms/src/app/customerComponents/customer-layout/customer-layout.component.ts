@@ -19,15 +19,16 @@ export class CustomerLayoutComponent {
 
   constructor(private customerService: CustomerService) {}
 
+  //On init subscribe to changes in Customers and convert them into a list to be passed to the list component
   ngOnInit(): void {
     this.customerService.mockCustomers$.subscribe((customers: Customer[]) => {
       // Cache customers and transform them into listItems
       this.customers = customers;
       this.listItems = updateListItems(customers, ObjectType.Customer); // Update listItems whenever customers change
-      console.log(this.listItems);
     });
   }
 
+  //When list item selected find customer who matches list item ID
   onSelectedCustomerRecieved(listItem: ListItem): void {
     const customer = this.customers.find(
       (cust) => cust.customerId === listItem.id
