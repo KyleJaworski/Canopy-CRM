@@ -13,7 +13,7 @@ import { CustomerLayoutComponent } from '../../customerComponents/customer-layou
     DashboardLayoutComponent,
     TeamLayoutComponent,
 
-    //CustomerLayoutComponent,
+    CustomerLayoutComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',

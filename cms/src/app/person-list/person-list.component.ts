@@ -1,8 +1,14 @@
-import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Customer } from '../models/customer';
-import { CustomerService } from '../services/customer/customer.service';
-import { ListItems } from '../models/listItems';
+
+import { ListItem } from '../models/listItem';
 
 @Component({
   selector: 'app-person-list',
@@ -10,13 +16,21 @@ import { ListItems } from '../models/listItems';
   standalone: true,
   templateUrl: './person-list.component.html',
   styleUrl: './person-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonListComponent implements OnInit {
-  @Input() listItems: ListItems[] = [];
+export class PersonListComponent {
+  @Input() listItems: ListItem[] = [];
+  @Output() selectedlistItem = new EventEmitter<ListItem>();
 
-  selectedItemId: number = 0;
+  selectedItemId!: number;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  onSelectItem(listItem: ListItem): void {
+    this.selectedItemId == listItem.id
+      ? (this.selectedItemId = 0)
+      : (this.selectedItemId = listItem.id);
+
+    this.selectedlistItem.emit(listItem);
+  }
 }

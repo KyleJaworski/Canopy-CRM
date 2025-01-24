@@ -3,7 +3,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Customer } from '../../models/customer';
 import { CustomerService } from '../../services/customer/customer.service';
-import { ListItems } from '../../models/listItems';
+import { ListItem, ObjectType, updateListItems } from '../../models/listItem';
 
 @Component({
   selector: 'app-customer-layout',
@@ -13,33 +13,28 @@ import { ListItems } from '../../models/listItems';
   styleUrl: './customer-layout.component.scss',
 })
 export class CustomerLayoutComponent {
-  @Output() selectedCustomer = new EventEmitter<Customer>();
-
-  selectedcustomerId: number = 0;
-  listItems: ListItems[] = [];
+  selectedCustomer?: Customer | null = null;
+  listItems: ListItem[] = [];
+  customers!: Customer[];
 
   constructor(private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.customerService.mockCustomers$.subscribe((customers: Customer[]) => {
-      // Create a new array with the desired structure
-      this.listItems = customers.map((customer) => ({
-        id: customer.customerId,
-        fullName: `${customer.firstName} ${customer.lastName}`,
-        phoneNumber: customer.phoneNumber,
-        email: customer.email,
-        additionalLabel: '',
-      }));
-
-      console.log(this.listItems); // Debug: Check the new array in the console
+      // Cache customers and transform them into listItems
+      this.customers = customers;
+      this.listItems = updateListItems(customers, ObjectType.Customer); // Update listItems whenever customers change
+      console.log(this.listItems);
     });
   }
 
-  onSelectcustomer(customer: Customer): void {
-    this.selectedcustomerId == customer.customerId
-      ? (this.selectedcustomerId = 0)
-      : (this.selectedcustomerId = customer.customerId);
+  onSelectedCustomerRecieved(listItem: ListItem): void {
+    const customer = this.customers.find(
+      (cust) => cust.customerId === listItem.id
+    );
 
-    this.selectedCustomer.emit(customer); // Emit the selected customer
+    this.selectedCustomer == customer
+      ? (this.selectedCustomer = null)
+      : (this.selectedCustomer = customer);
   }
 }

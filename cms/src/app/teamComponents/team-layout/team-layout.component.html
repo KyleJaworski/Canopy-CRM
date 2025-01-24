@@ -6,9 +6,10 @@
     *ngIf="!addEmployee"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
-    <app-employee-list
-      (selectedEmployee)="onSelectedEmployeeRecieved($event)"
-    ></app-employee-list>
+    <app-person-list
+      [listItems]="listItems"
+      (selectedlistItem)="onSelectedEmployeeRecieved($event)"
+    ></app-person-list>
   </div>
 
   <!--Employee Statistics-->

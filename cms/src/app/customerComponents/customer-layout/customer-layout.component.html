@@ -5,7 +5,10 @@
   <div
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
-    <app-person-list [listItems]="listItems"></app-person-list>
+    <app-person-list
+      (selectedlistItem)="onSelectedCustomerRecieved($event)"
+      [listItems]="listItems"
+    ></app-person-list>
   </div>
 
   <!-- Customer Info Container -->

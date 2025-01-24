@@ -1,5 +1,10 @@
 <ul role="list" class="divide-y divide-gray-100">
-  <li *ngFor="let listItem of listItems">
+  <li
+    *ngFor="let listItem of listItems"
+    class="relative py-5 hover:bg-gray-50"
+    [ngClass]="selectedItemId === listItem.id ? 'bg-gray-100' : ''"
+    (click)="onSelectItem(listItem)"
+  >
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mx-auto flex max-w-4xl justify-between gap-x-6">
         <div class="flex min-w-0 gap-x-4">
@@ -20,6 +25,11 @@
           </div>
         </div>
         <div class="flex shrink-0 items-center gap-x-4">
+          <div class="hidden sm:flex sm:flex-col sm:items-end">
+            <p class="text-sm/6 text-gray-900">
+              {{ listItem.additionalLabel }}
+            </p>
+          </div>
           <svg
             class="size-5 flex-none text-gray-400"
             viewBox="0 0 20 20"

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EmployeeListComponent } from '../employee-list/employee-list.component';
+import { PersonListComponent } from '../../person-list/person-list.component';
 import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
 import { Employee } from '../../models/employee';
 import { TabBarComponent } from '../tab-bar/tab-bar.component';
@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { TabItem } from '../../models/tabItems';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { EmployeesOverviewComponent } from '../employees-overview/employees-overview.component';
+import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
 
 @Component({
   selector: 'app-team-layout',
   imports: [
-    EmployeeListComponent,
+    PersonListComponent,
     EmployeeInfoComponent,
     TabBarComponent,
     CommonModule,
@@ -24,6 +25,7 @@ export class TeamLayoutComponent {
   selectedEmployee?: Employee | null = null;
   addEmployee: Boolean = false;
   employees: Employee[] = [];
+  listItems: ListItem[] = [];
 
   tabItems: TabItem[] = [
     { label: 'Contact Information', active: true, value: 1, indicator: 0 },
@@ -35,8 +37,13 @@ export class TeamLayoutComponent {
   ngOnInit(): void {
     this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
       this.selectedEmployee = null;
-
       this.addEmployee = value;
+    });
+
+    this.employeeService.mockEmployees$.subscribe((employees) => {
+      this.employees = employees;
+      this.listItems = updateListItems(employees, ObjectType.Employee); // Update listItems whenever employees change
+      console.log(this.listItems);
     });
   }
 
@@ -50,11 +57,16 @@ export class TeamLayoutComponent {
     return tab.active === true;
   }
 
-  onSelectedEmployeeRecieved(employee: Employee): void {
+  onSelectedEmployeeRecieved(listItem: ListItem): void {
+    const employee = this.employees.find(
+      (emp) => emp.employeeId === listItem.id
+    );
+
     this.selectedEmployee == employee
       ? (this.selectedEmployee = null)
       : (this.selectedEmployee = employee);
   }
+
   onAddEmployeeRecieved(add: Boolean): void {
     this.addEmployee = add;
   }
