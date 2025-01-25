@@ -1,73 +1,77 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
 import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
-import { Employee } from '../../models/employee';
 import { TabBarComponent } from '../../generalComponents/tab-bar/tab-bar.component';
-import { CommonModule } from '@angular/common';
-import { TabItem } from '../../models/tabItems';
-import { EmployeeService } from '../../services/employee/employee.service';
 import { EmployeesOverviewComponent } from '../employees-overview/employees-overview.component';
+import { EmployeeService } from '../../services/employee/employee.service';
+import { Employee } from '../../models/employee';
+import { TabItem } from '../../models/tabItems';
 import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
 
 @Component({
   selector: 'app-team-layout',
   imports: [
+    CommonModule,
     PersonListComponent,
     EmployeeInfoComponent,
     TabBarComponent,
-    CommonModule,
     EmployeesOverviewComponent,
   ],
   templateUrl: './team-layout.component.html',
   styleUrl: './team-layout.component.scss',
 })
 export class TeamLayoutComponent {
+  // State variables
   selectedEmployee?: Employee | null = null;
-  addEmployee: Boolean = false;
+  addEmployee: boolean = false;
   employees: Employee[] = [];
   listItems: ListItem[] = [];
   objectType: ObjectType = ObjectType.Employee;
 
+  // Tabs for the layout
   tabItems: TabItem[] = [
     { label: 'Contact Information', active: true, value: 1, indicator: 0 },
-    { label: 'Privlidges', active: false, value: 2, indicator: 1 },
+    { label: 'Privileges', active: false, value: 2, indicator: 1 },
   ];
 
   constructor(private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
-    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
+    // Handle changes to addEmployee state
+    this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
       this.selectedEmployee = null;
       this.addEmployee = value;
     });
 
+    // Update employees and listItems whenever employees change
     this.employeeService.mockEmployees$.subscribe((employees) => {
       this.employees = employees;
-      this.listItems = updateListItems(employees, ObjectType.Employee); // Update listItems whenever employees change
+      this.listItems = updateListItems(employees, ObjectType.Employee);
     });
   }
 
-  handleTabSelection(selectedTab: TabItem) {
-    for (let tab of this.tabItems) {
-      tab === selectedTab ? (tab.active = true) : (tab.active = false);
-    }
+  // Handle tab selection
+  handleTabSelection(selectedTab: TabItem): void {
+    this.tabItems.forEach((tab) => (tab.active = tab === selectedTab));
   }
 
+  // Check if a tab is active
   isTabActive(tab: TabItem): boolean {
-    return tab.active === true;
+    return tab.active;
   }
 
+  // Handle selected employee from list
   onSelectedEmployeeRecieved(listItem: ListItem): void {
     const employee = this.employees.find(
       (emp) => emp.employeeId === listItem.id
     );
-
-    this.selectedEmployee == employee
-      ? (this.selectedEmployee = null)
-      : (this.selectedEmployee = employee);
+    this.selectedEmployee =
+      this.selectedEmployee === employee ? null : employee;
   }
 
-  onAddEmployeeRecieved(add: Boolean): void {
+  // Handle "add employee" action
+  onAddEmployeeRecieved(add: boolean): void {
     this.addEmployee = add;
   }
 }

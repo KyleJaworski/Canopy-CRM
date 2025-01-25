@@ -22,7 +22,6 @@ interface TreeNode {
 })
 export class EmployeesOverviewComponent implements OnInit {
   platformId = inject(PLATFORM_ID);
-  data: any;
   selectedNode = 0;
   hierarchy: TreeNode[];
 

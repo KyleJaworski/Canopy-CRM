@@ -35,6 +35,7 @@ export class EmployeeInfoComponent implements OnChanges {
       id: emp.employeeId,
     }));
     this.initializeForm();
+    console.log(this.directReports);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,7 +55,7 @@ export class EmployeeInfoComponent implements OnChanges {
       lastName: ['', Validators.required],
       jobTitle: ['Laborer', Validators.required],
       teamRole: ['', Validators.required],
-      directReportId: ['', Validators.required],
+      directReportId: [0, Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [
         '',
@@ -127,7 +128,7 @@ export class EmployeeInfoComponent implements OnChanges {
       lastName: formValues.lastName,
       jobTitle: formValues.jobTitle,
       teamRole: formValues.teamRole || TeamRole.TeamMember,
-      directReportId: formValues.directReportId,
+      directReportId: Number(formValues.directReportId),
       email: formValues.email,
       phoneNumber: formValues.phoneNumber,
       address: {
@@ -137,6 +138,7 @@ export class EmployeeInfoComponent implements OnChanges {
       },
     };
 
+    console.log(employee);
     if (employee.employeeId) {
       this.employeeService.updateEmployee(employee);
     } else {

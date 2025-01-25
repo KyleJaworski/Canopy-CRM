@@ -19,7 +19,7 @@ import { CustomerLayoutComponent } from '../../customerComponents/customer-layou
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent implements OnInit {
-  currentPage: string = 'Customers';
+  currentPage: string = 'Team';
   handleMenuSelection(selectedPage: string) {
     this.currentPage = selectedPage; // Update the current page
   }
