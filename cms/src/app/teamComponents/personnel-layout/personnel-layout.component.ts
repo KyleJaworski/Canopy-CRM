@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
-import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
+import { EmployeeInfoComponent } from '../personnel-info/personnel-info.component';
 import { TabBarComponent } from '../../generalComponents/tab-bar/tab-bar.component';
-import { EmployeesOverviewComponent } from '../employees-overview/employees-overview.component';
+import { EmployeesOverviewComponent } from '../personnel-overview/personnel-overview.component';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../../models/employee';
 import { TabItem } from '../../models/tabItems';
@@ -18,8 +18,8 @@ import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
     TabBarComponent,
     EmployeesOverviewComponent,
   ],
-  templateUrl: './team-layout.component.html',
-  styleUrl: './team-layout.component.scss',
+  templateUrl: './personnel-layout.component.html',
+  styleUrl: './personnel-layout.component.scss',
 })
 export class TeamLayoutComponent {
   // State variables

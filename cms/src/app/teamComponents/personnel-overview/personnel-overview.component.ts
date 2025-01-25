@@ -17,8 +17,8 @@ interface TreeNode {
 @Component({
   selector: 'app-employees-overview',
   imports: [OrganizationChartModule, CommonModule],
-  templateUrl: './employees-overview.component.html',
-  styleUrl: './employees-overview.component.scss',
+  templateUrl: './personnel-overview.component.html',
+  styleUrl: './personnel-overview.component.scss',
 })
 export class EmployeesOverviewComponent implements OnInit {
   platformId = inject(PLATFORM_ID);

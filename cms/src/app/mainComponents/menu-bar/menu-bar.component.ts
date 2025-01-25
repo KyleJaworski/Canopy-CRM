@@ -8,8 +8,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuItems } from '../../models/menuItems.enum';
 import { EmployeeService } from '../../services/employee/employee.service';
+import { MenuItems } from '../../models/menuItems.enum';
 
 @Component({
   selector: 'app-menu-bar',
@@ -24,7 +24,7 @@ export class MenuBarComponent implements OnInit {
   addEmployee!: Boolean;
 
   @Output() menuOption = new EventEmitter<string>();
-  activeMenuItem = 'Team';
+  activeMenuItem: MenuItems = MenuItems.Personnel;
 
   // Access the button and menu using template references
   @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;
@@ -38,7 +38,7 @@ export class MenuBarComponent implements OnInit {
     });
   }
 
-  selectedMenuItem(item: string) {
+  selectedMenuItem(item: MenuItems) {
     this.menuOption.emit(item); // Emit the value to the parent component
     this.activeMenuItem = item; // Update the active menu item
   }

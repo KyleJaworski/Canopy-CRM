@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TeamLayoutComponent } from './team-layout.component';
+import { TeamLayoutComponent } from './personnel-layout.component';
 
 describe('TeamLayoutComponent', () => {
   let component: TeamLayoutComponent;

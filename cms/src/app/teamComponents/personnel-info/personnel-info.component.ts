@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,47 +14,57 @@ import {
 import { TeamRole, Employee } from '../../models/employee';
 import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../services/employee/employee.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-employee-info',
   imports: [ReactiveFormsModule, CommonModule, SelectModule],
-  templateUrl: './employee-info.component.html',
-  styleUrl: './employee-info.component.scss',
+  templateUrl: './personnel-info.component.html',
+  styleUrl: './personnel-info.component.scss',
 })
 export class EmployeeInfoComponent implements OnChanges {
-  employeeForm!: FormGroup;
-  directReports: any[] = [];
+  employeeForm!: FormGroup; // Reactive form for employee data
+  directReports: any[] = []; // List of direct reports for dropdown
+  teamRoles = Object.values(TeamRole); // Extract values from the TeamRole enum
 
-  @Input() employee?: Employee | null = null;
-  @Input() addEmployee?: boolean;
+  @Input() employee?: Employee | null = null; // Input employee data
+  @Input() addEmployee?: boolean; // Flag for add mode
 
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private cdr: ChangeDetectorRef
   ) {
-    const employees = this.employeeService.getMockEmployees();
-    this.directReports = employees.map((emp) => ({
+    this.directReports = this.employeeService.getMockEmployees().map((emp) => ({
       name: emp.firstName,
       id: emp.employeeId,
     }));
     this.initializeForm();
-    console.log(this.directReports);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['employee'] && changes['employee'].currentValue) {
-      this.prefillForm(this.employee!); // Populate the form when employee changes
+    if (changes['employee']?.currentValue) {
+      this.prefillForm(this.employee!); // Populate form with employee data
     } else {
-      this.employeeForm.reset();
+      this.employeeForm.reset({
+        jobTitle: 'Laborer', // Explicitly reset to default value
+        firstName: '',
+        lastName: '',
+        teamRole: '',
+        directReportId: 0,
+        email: '',
+        phoneNumber: '',
+        streetAddress: '',
+        city: '',
+        postalCode: '',
+        employeeId: null,
+      });
     }
-    this.cdr.detectChanges();
+    this.cdr.detectChanges(); // Detect changes for re-render
   }
 
+  // Initialize form with default validators
   initializeForm(): void {
-    // Handle undefined employee by providing fallback values
     this.employeeForm = this.fb.group({
       employeeId: [null],
       firstName: ['', Validators.required],
@@ -59,12 +75,7 @@ export class EmployeeInfoComponent implements OnChanges {
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{3}-\d{3}-\d{4}$/),
-          Validators.maxLength(12),
-        ], // Sync validators
-        [], // Async validators (none in this case)
+        [Validators.required, Validators.pattern(/^\d{3}-\d{3}-\d{4}$/)],
       ],
       streetAddress: ['', Validators.required],
       city: ['', Validators.required],
@@ -72,84 +83,74 @@ export class EmployeeInfoComponent implements OnChanges {
     });
   }
 
+  // Prefill the form with existing employee data
   prefillForm(employee: Employee): void {
-    // Handle undefined employee by providing fallback values
-
     this.employeeForm.patchValue({
       employeeId: employee.employeeId || null,
-      firstName: employee?.firstName || '',
-      lastName: employee?.lastName || '',
+      firstName: employee.firstName || '',
+      lastName: employee.lastName || '',
       jobTitle: employee.jobTitle || 'Laborer',
       teamRole: employee.teamRole || TeamRole.TeamMember,
-      directReportId: employee?.directReportId || null,
-      email: employee?.email || '',
-      phoneNumber: employee?.phoneNumber || '',
-      streetAddress: employee?.address?.street || '',
-      city: employee?.address?.city || '',
-      postalCode: employee?.address?.postalCode || '',
+      directReportId: employee.directReportId || null,
+      email: employee.email || '',
+      phoneNumber: employee.phoneNumber || '',
+      streetAddress: employee.address?.street || '',
+      city: employee.address?.city || '',
+      postalCode: employee.address?.postalCode || '',
     });
   }
 
+  // Scroll form to the top
   repositionForm(): void {
-    const element = document.querySelector('#form-top'); // Replace with the ID of the element
-    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document
+      .querySelector('#form-top')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  // Format phone number input
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-    const formatted = value.replace(
-      /(\d{3})(\d{3})?(\d{1,4})?/,
-      (match, p1, p2, p3) => {
-        let result = p1;
-        if (p2) result += `-${p2}`;
-        if (p3) result += `-${p3}`;
-        return result;
-      }
-    );
-    input.value = formatted; // Update the input value
+    const formatted = input.value
+      .replace(/\D/g, '')
+      .replace(
+        /(\d{3})(\d{3})?(\d{1,4})?/,
+        (m, p1, p2, p3) => `${p1}${p2 ? '-' + p2 : ''}${p3 ? '-' + p3 : ''}`
+      );
+    input.value = formatted;
     this.employeeForm
       .get('phoneNumber')
       ?.setValue(formatted, { emitEvent: false });
   }
 
+  // Handle cancel operation
   onCancel(): void {
     this.employeeForm.reset();
     this.repositionForm();
     this.employeeService.flipAddEmployee();
   }
 
+  // Handle form submission
   onSubmit(): void {
     const formValues = this.employeeForm.value;
-
     const employee: Employee = {
-      employeeId: formValues.employeeId,
-      firstName: formValues.firstName,
-      lastName: formValues.lastName,
-      jobTitle: formValues.jobTitle,
-      teamRole: formValues.teamRole || TeamRole.TeamMember,
+      ...formValues,
       directReportId: Number(formValues.directReportId),
-      email: formValues.email,
-      phoneNumber: formValues.phoneNumber,
       address: {
-        street: formValues.streetAddress, // Map back to nested structure
+        street: formValues.streetAddress,
         city: formValues.city,
         postalCode: formValues.postalCode,
       },
     };
 
-    console.log(employee);
     if (employee.employeeId) {
       this.employeeService.updateEmployee(employee);
     } else {
-      const newEmployee: Employee = {
+      this.employeeService.addEmployee({
         ...employee,
         employeeId: this.employeeService.generateUniqueEmployeeId(),
-      };
-      this.employeeService.addEmployee(newEmployee);
+      });
       this.employeeService.flipAddEmployee();
     }
-
     this.repositionForm();
   }
 }

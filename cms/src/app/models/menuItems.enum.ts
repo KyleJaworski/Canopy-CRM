@@ -1,6 +1,6 @@
 export enum MenuItems {
   Dashboard = 'Dashboard',
-  Team = 'Team',
+  Personnel = 'Personnel',
   Customers = 'Customers',
   Reports = 'Reports',
 }
