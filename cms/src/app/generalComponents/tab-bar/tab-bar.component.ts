@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabItem } from '../../models/tabItems';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { CustomerService } from '../../services/customer/customer.service';
 import { ObjectType } from '../../models/listItem';
+import { Customer } from '../../models/customer';
+import { Employee } from '../../models/employee';
 
 @Component({
   selector: 'app-tab-bar',
@@ -16,6 +18,7 @@ export class TabBarComponent {
 
   @Input() objectType!: ObjectType;
   @Input() tabItems: TabItem[] = [];
+  @Input() editObject: Employee | Customer | null = null;
 
   @Output() selectedTab = new EventEmitter<TabItem>();
 
@@ -25,6 +28,7 @@ export class TabBarComponent {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.editObject);
     switch (this.objectType) {
       case ObjectType.Customer: {
         this.customerService.addCustomerBool$.subscribe((value: boolean) => {
@@ -61,6 +65,19 @@ export class TabBarComponent {
         break;
       case ObjectType.Customer:
         this.customerService.flipAddCustomer();
+        break;
+      default:
+        break;
+    }
+  }
+
+  deactivateObject(editObject: ObjectType, object: Employee | Customer): void {
+    switch (editObject) {
+      case ObjectType.Employee:
+        //this.employeeService.deactivateEmployee();
+        break;
+      case ObjectType.Customer:
+        //this.customerService.deactivateCustomer();
         break;
       default:
         break;

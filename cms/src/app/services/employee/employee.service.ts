@@ -106,6 +106,7 @@ export class EmployeeService {
           city: 'Springfield',
           postalCode: '12345',
         },
+        isActive: true,
       },
       {
         employeeId: 2,
@@ -121,6 +122,7 @@ export class EmployeeService {
           city: 'Lafayette',
           postalCode: '43211',
         },
+        isActive: true,
       },
     ];
   }

@@ -27,6 +27,7 @@
     [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
   >
     <app-tab-bar
+      [editObject]="selectedEmployee"
       [tabItems]="tabItems"
       [objectType]="objectType"
       (selectedTab)="handleTabSelection($event)"

@@ -23,7 +23,7 @@ import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
 })
 export class TeamLayoutComponent {
   // State variables
-  selectedEmployee?: Employee | null = null;
+  selectedEmployee: Employee | null = null;
   addEmployee: boolean = false;
   employees: Employee[] = [];
   listItems: ListItem[] = [];
@@ -67,7 +67,10 @@ export class TeamLayoutComponent {
       (emp) => emp.employeeId === listItem.id
     );
     this.selectedEmployee =
-      this.selectedEmployee === employee ? null : employee;
+      this.selectedEmployee === employee ? null : employee || null;
+
+    console.log('selected employee');
+    console.log(this.selectedEmployee);
   }
 
   // Handle "add employee" action
