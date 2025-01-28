@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
 import { EmployeeInfoComponent } from '../personnel-info/personnel-info.component';
@@ -28,6 +28,7 @@ export class TeamLayoutComponent {
   employees: Employee[] = [];
   listItems: ListItem[] = [];
   objectType: ObjectType = ObjectType.Employee;
+  loading: boolean = true;
 
   // Tabs for the layout
   tabItems: TabItem[] = [
@@ -39,16 +40,14 @@ export class TeamLayoutComponent {
 
   ngOnInit(): void {
     // Handle changes to addEmployee state
+    this.loading = true;
     this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
-      this.selectedEmployee = null;
+      this.selectedEmployee = this.selectedEmployee;
       this.addEmployee = value;
     });
 
-    // Update employees and listItems whenever employees change
-    this.employeeService.mockEmployees$.subscribe((employees) => {
-      this.employees = employees;
-      this.listItems = updateListItems(employees, ObjectType.Employee);
-    });
+    this.clearData();
+    this.fetchEmployees();
   }
 
   // Handle tab selection
@@ -62,19 +61,50 @@ export class TeamLayoutComponent {
   }
 
   // Handle selected employee from list
-  onSelectedEmployeeRecieved(listItem: ListItem): void {
-    const employee = this.employees.find(
-      (emp) => emp.employeeId === listItem.id
-    );
-    this.selectedEmployee =
-      this.selectedEmployee === employee ? null : employee || null;
+  onSelectedEmployeeRecieved(listItem: ListItem | null): void {
+    if (listItem) {
+      const employee = this.employees.find(
+        (emp) => emp.employeeId === listItem.id
+      );
 
-    console.log('selected employee');
-    console.log(this.selectedEmployee);
+      this.selectedEmployee =
+        this.selectedEmployee === employee ? null : employee || null;
+    } else {
+      this.selectedEmployee = null;
+    }
   }
 
   // Handle "add employee" action
   onAddEmployeeRecieved(add: boolean): void {
     this.addEmployee = add;
+  }
+
+  fetchEmployees(): void {
+    // Update employees and listItems whenever employees change
+    this.employeeService.mockEmployees$.subscribe((employees) => {
+      // Check if the selectedEmployee still exists in the employees list
+      if (this.selectedEmployee) {
+        const isSelectedEmployeeValid = employees.some(
+          (employee) =>
+            employee.employeeId === this.selectedEmployee?.employeeId
+        );
+
+        // Set selectedEmployee to null if it's no longer in the employees list
+        this.selectedEmployee = isSelectedEmployeeValid
+          ? this.selectedEmployee
+          : null;
+      }
+
+      // Update the list of employees and listItems
+
+      this.listItems = [...updateListItems(employees, ObjectType.Employee)];
+      this.employees = [...employees];
+    });
+    this.loading = false;
+  }
+  clearData(): void {
+    this.loading = true;
+    this.employees = [];
+    this.listItems = [];
   }
 }

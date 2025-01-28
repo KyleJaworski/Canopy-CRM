@@ -9,7 +9,7 @@ export interface Customer {
     city?: string; // Optional nested field
     postalCode?: string; // Optional nested field
   };
-  isActive?: boolean; // Optional field
+  isActive: boolean; // Optional field
   dateOfBirth?: Date; // Optional field
 }
 

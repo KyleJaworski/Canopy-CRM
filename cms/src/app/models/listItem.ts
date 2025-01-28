@@ -14,6 +14,7 @@ export interface ListItem {
   email?: string;
   additionalLabel?: string;
   objectType?: ObjectType;
+  isActive: boolean;
 }
 
 export function updateListItems(
@@ -30,6 +31,7 @@ export function updateListItems(
         email: customer.email || 'No Email',
         additionalLabel: '',
         objectType: ObjectType.Customer,
+        isActive: customer.isActive,
       };
     } else if (objectType === ObjectType.Employee) {
       const employee = item as Employee;
@@ -40,6 +42,7 @@ export function updateListItems(
         email: employee.email || 'No Email',
         additionalLabel: employee.jobTitle || '',
         objectType: ObjectType.Employee,
+        isActive: employee.isActive,
       };
     } else {
       throw new Error('Invalid item or objectType provided');

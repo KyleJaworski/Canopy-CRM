@@ -3,7 +3,7 @@
 >
   <!-- Employee List Container -->
   <div
-    *ngIf="!addEmployee"
+    *ngIf="!addEmployee && !loading"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
     <app-person-list
@@ -22,7 +22,7 @@
 
   <!-- Employee Info Container -->
   <div
-    *ngIf="selectedEmployee || addEmployee"
+    *ngIf="selectedEmployee != null || addEmployee"
     class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
     [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
   >

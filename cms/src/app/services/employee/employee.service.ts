@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Employee, TeamRole } from '../../models/employee';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,16 @@ export class EmployeeService {
     this.addEmployeeBool.next(!this.addEmployeeBool.value);
   }
 
+  deactivateEmployee(emp: Employee) {
+    const updatedEmployee = { ...emp, isActive: false };
+    this.updateEmployee(updatedEmployee);
+  }
+
+  activateEmployee(emp: Employee) {
+    const updatedEmployee = { ...emp, isActive: true };
+    this.updateEmployee(updatedEmployee);
+  }
+
   updateEmployee(employeeToUpdate: Employee) {
     const currentEmployees = this.mockEmployeesSubject.value; // Get the current value of mockEmployees
 
@@ -64,6 +75,18 @@ export class EmployeeService {
     const updatedEmployees = [...currentEmployees, newEmployee];
 
     // Emit the updated array and save to localStorage
+    this.mockEmployeesSubject.next(updatedEmployees);
+
+    if (this.isBrowser()) {
+      localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
+    }
+  }
+
+  deleteEmployee(emp: Employee) {
+    const currentEmployees = this.mockEmployeesSubject.value;
+    const updatedEmployees = currentEmployees.filter(
+      (employee) => employee.employeeId !== emp.employeeId
+    );
     this.mockEmployeesSubject.next(updatedEmployees);
 
     if (this.isBrowser()) {

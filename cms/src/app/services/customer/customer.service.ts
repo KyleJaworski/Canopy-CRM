@@ -105,6 +105,7 @@ export class CustomerService {
           city: 'Springfield',
           postalCode: '12345',
         },
+        isActive: true,
       },
       {
         customerId: 2,
@@ -117,6 +118,7 @@ export class CustomerService {
           city: 'Lafayette',
           postalCode: '43211',
         },
+        isActive: true,
       },
       {
         customerId: 3,
@@ -129,6 +131,7 @@ export class CustomerService {
           city: 'Lafayette',
           postalCode: '43211',
         },
+        isActive: true,
       },
       {
         customerId: 4,
@@ -141,6 +144,7 @@ export class CustomerService {
           city: 'Lafayette',
           postalCode: '43211',
         },
+        isActive: true,
       },
     ];
   }

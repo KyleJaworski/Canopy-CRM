@@ -66,22 +66,49 @@
         >
         </a>
         <button
-          *ngIf="addObject"
+          *ngIf="addObject === true"
           type="button"
           (click)="cancelAdd(objectType)"
           class="relative inline-flex items-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Cancel
         </button>
-        <button
-          *ngIf="editObject"
-          type="button"
-          (click)="cancelAdd(objectType)"
-          class="relative inline-flex items-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          Deactivate
-        </button>
+        <ng-container *ngIf="addObject === false">
+          <!--When Object is Active-->
+          <button
+            *ngIf="editObject?.isActive"
+            type="button"
+            (click)="openPopup(PopupAction.Deactivate)"
+            class="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            Deactivate
+          </button>
+
+          <!--When Object is Inactive-->
+          <ng-container *ngIf="!editObject?.isActive">
+            <button
+              type="button"
+              (click)="openPopup(PopupAction.Reactivate)"
+              class="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Reactivate
+            </button>
+            <button
+              type="button"
+              (click)="openPopup(PopupAction.Delete)"
+              class="relative inline-flex items-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Delete
+            </button>
+          </ng-container>
+        </ng-container>
       </nav>
     </div>
   </div>
+  <app-popup
+    *ngIf="isPopupOpen"
+    (close)="closePopup()"
+    (confirm)="confirmPopup()"
+    [popupWarning]="popupWarning"
+  ></app-popup>
 </div>

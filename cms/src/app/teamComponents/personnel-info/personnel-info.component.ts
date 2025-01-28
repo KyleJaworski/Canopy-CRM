@@ -132,13 +132,15 @@ export class EmployeeInfoComponent implements OnChanges {
   // Handle form submission
   onSubmit(): void {
     const formValues = this.employeeForm.value;
+    const { directReportId, streetAddress, city, postalCode, ...rest } =
+      formValues;
     const employee: Employee = {
-      ...formValues,
-      directReportId: Number(formValues.directReportId),
+      ...rest,
+      directReportId: Number(directReportId),
       address: {
-        street: formValues.streetAddress,
-        city: formValues.city,
-        postalCode: formValues.postalCode,
+        street: streetAddress,
+        city: city,
+        postalCode: postalCode,
       },
     };
 
@@ -148,6 +150,7 @@ export class EmployeeInfoComponent implements OnChanges {
       this.employeeService.addEmployee({
         ...employee,
         employeeId: this.employeeService.generateUniqueEmployeeId(),
+        isActive: true,
       });
       this.employeeService.flipAddEmployee();
     }

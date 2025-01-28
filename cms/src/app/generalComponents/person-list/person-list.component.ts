@@ -4,6 +4,8 @@ import {
   ChangeDetectionStrategy,
   Output,
   EventEmitter,
+  SimpleChanges,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListItem } from '../../models/listItem';
@@ -16,7 +18,7 @@ import { ListItem } from '../../models/listItem';
   styleUrl: './person-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonListComponent {
+export class PersonListComponent implements OnInit {
   //Takes in preformated ListItem[]
   @Input() listItems: ListItem[] = [];
   //Outputs selected item back to parent
@@ -24,7 +26,17 @@ export class PersonListComponent {
 
   selectedItemId!: number;
 
-  constructor() {}
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['listItems'] && this.selectedItemId) {
+      const selectedItem = this.listItems.find(
+        (item) => item.id === this.selectedItemId
+      );
+
+      this.selectedlistItem.emit(selectedItem);
+    }
+  }
 
   onSelectItem(listItem: ListItem): void {
     this.selectedItemId == listItem.id
