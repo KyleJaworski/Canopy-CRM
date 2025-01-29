@@ -13,9 +13,7 @@ export class PopupComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
 
-  ngOnInit(): void {
-    console.log(this.popupWarning);
-  }
+  ngOnInit(): void {}
 
   closePopup() {
     this.close.emit();
