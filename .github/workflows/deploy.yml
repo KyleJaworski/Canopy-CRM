@@ -28,7 +28,7 @@ jobs:
 
       # Step 4: Build the Angular app
       - name: Build Angular app
-        run: npm run build -- --output-path=dist --base-href=/
+        run: npm run build -- --output-path=dist --base-href="https://KyleJaworski.github.io/customer-management-tool/"
         working-directory: cms # Ensure 'my-portfolio' is your Angular project folder
 
       # Step 5: Deploy to GitHub Pages
