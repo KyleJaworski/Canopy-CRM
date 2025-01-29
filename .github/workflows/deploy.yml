@@ -3,7 +3,7 @@ name: Deploy Angular App to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - CRM-Front-End
   workflow_dispatch:
 
 jobs:
@@ -24,12 +24,12 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
-        working-directory: cms # Ensure 'my-portfolio' is your Angular project folder
+        working-directory: cms # Ensure 'working-directory' is your Angular project folder
 
       # Step 4: Build the Angular app
       - name: Build Angular app
-        run: npm run build -- --output-path=dist --base-href=/
-        working-directory: cms # Ensure 'my-portfolio' is your Angular project folder
+        run: npm run build -- --output-path=dist --base-href="https://crm.kylejaworski.dev/"
+        working-directory: cms # Ensure 'working-directory' is your Angular project folder
 
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
