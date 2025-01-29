@@ -26,6 +26,7 @@ export class EmployeeInfoComponent implements OnChanges {
   employeeForm!: FormGroup; // Reactive form for employee data
   directReports: any[] = []; // List of direct reports for dropdown
   teamRoles = Object.values(TeamRole); // Extract values from the TeamRole enum
+  teamRole = TeamRole;
 
   @Input() employee?: Employee | null = null; // Input employee data
   @Input() addEmployee?: boolean; // Flag for add mode
@@ -44,6 +45,9 @@ export class EmployeeInfoComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['employee']?.currentValue) {
+      this.directReports = this.directReports.filter(
+        (emp) => emp.id !== this.employee?.employeeId
+      );
       this.prefillForm(this.employee!); // Populate form with employee data
     } else {
       this.employeeForm.reset({

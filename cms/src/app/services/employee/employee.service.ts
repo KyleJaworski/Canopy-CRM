@@ -16,14 +16,21 @@ export class EmployeeService {
 
   constructor() {
     // Load initial data from localStorage if available and in browser environment
-    const storedEmployees = this.isBrowser()
-      ? localStorage.getItem('mockEmployees')
-      : null;
-    const initialEmployees = storedEmployees
-      ? JSON.parse(storedEmployees)
-      : this.getDefaultMockEmployees();
+    if (this.isBrowser()) {
+      // Load from localStorage (if available)
+      const storedEmployees = localStorage.getItem('mockEmployees');
+      const initialEmployees = storedEmployees
+        ? JSON.parse(storedEmployees)
+        : this.getDefaultMockEmployees();
 
-    this.mockEmployeesSubject.next(initialEmployees);
+      // Initialize localStorage only once
+      if (!storedEmployees) {
+        localStorage.setItem('mockEmployees', JSON.stringify(initialEmployees));
+      }
+
+      // Push to subscribers
+      this.mockEmployeesSubject.next(initialEmployees);
+    }
   }
 
   // Check if code is running in the browser
@@ -60,13 +67,12 @@ export class EmployeeService {
         ...employeeToUpdate,
       };
 
-      // Emit the updated Employees array
-      this.mockEmployeesSubject.next(updatedEmployees);
-
       // Save to localStorage if in the browser
       if (this.isBrowser()) {
         localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
       }
+      // Emit the updated Employees array
+      this.mockEmployeesSubject.next(updatedEmployees);
     }
   }
 
@@ -74,12 +80,10 @@ export class EmployeeService {
     const currentEmployees = this.mockEmployeesSubject.value;
     const updatedEmployees = [...currentEmployees, newEmployee];
 
-    // Emit the updated array and save to localStorage
-    this.mockEmployeesSubject.next(updatedEmployees);
-
     if (this.isBrowser()) {
       localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
     }
+    this.mockEmployeesSubject.next(updatedEmployees);
   }
 
   deleteEmployee(emp: Employee) {
@@ -87,11 +91,11 @@ export class EmployeeService {
     const updatedEmployees = currentEmployees.filter(
       (employee) => employee.employeeId !== emp.employeeId
     );
-    this.mockEmployeesSubject.next(updatedEmployees);
 
     if (this.isBrowser()) {
       localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
     }
+    this.mockEmployeesSubject.next(updatedEmployees);
   }
 
   getMockEmployees(): Employee[] {

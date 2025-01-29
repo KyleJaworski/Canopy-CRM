@@ -3,21 +3,42 @@
 >
   <!-- Employee List Container -->
   <div
-    *ngIf="!addEmployee && !loading"
+    *ngIf="!addEmployee"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
-    <app-person-list
-      [listItems]="listItems"
-      (selectedlistItem)="onSelectedEmployeeRecieved($event)"
-    ></app-person-list>
+    <ng-container *ngIf="listItems.length === 0">
+      <div class="flex justify-center items-center h-full w-full">
+        <img
+          src="assets/icons/icons8-list-100.png"
+          alt="No items"
+          class="w-24 h-auto"
+        />
+      </div>
+    </ng-container>
+
+    <ng-container>
+      <app-person-list
+        [listItems]="listItems"
+        (selectedlistItem)="onSelectedEmployeeRecieved($event)"
+      ></app-person-list>
+    </ng-container>
   </div>
 
   <!--Employee Org-->
   <div
     class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
-    *ngIf="selectedEmployee == null && addEmployee == false"
+    *ngIf="selectedEmployee === null && addEmployee === false"
   >
-    <app-employees-overview></app-employees-overview>
+    <ng-container *ngIf="listItems.length === 0; showChart">
+      <div class="flex justify-center items-center h-full w-full">
+        <img
+          src="assets/icons/icons8-hierarchy-100-2.png"
+          alt="No items"
+          class="w-24 h-auto"
+        />
+      </div>
+    </ng-container>
+    <app-employees-overview #showChart></app-employees-overview>
   </div>
 
   <!-- Employee Info Container -->

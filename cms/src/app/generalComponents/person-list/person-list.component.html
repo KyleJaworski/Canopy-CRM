@@ -3,7 +3,7 @@
     *ngFor="let listItem of listItems"
     class="relative py-5 hover:bg-gray-50"
     [ngClass]="{
-      'bg-gray-200 hover:bg-gray-200': selectedItemId === listItem.id,
+      'bg-gray-200 hover:bg-gray-200': selectedItem === listItem,
 
     }"
     (click)="onSelectItem(listItem)"
