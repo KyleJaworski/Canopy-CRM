@@ -24,7 +24,7 @@ export class MenuBarComponent implements OnInit {
   addEmployee!: Boolean;
 
   @Output() menuOption = new EventEmitter<string>();
-  activeMenuItem: MenuItems = MenuItems.Dashboard;
+  activeMenuItem: MenuItems = MenuItems.Customers;
 
   // Access the button and menu using template references
   @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;

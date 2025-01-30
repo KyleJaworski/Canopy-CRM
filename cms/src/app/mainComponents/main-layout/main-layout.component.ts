@@ -19,7 +19,7 @@ import { MenuItems } from '../../models/menuItems.enum';
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent implements OnInit {
-  currentPage: string = MenuItems.Dashboard;
+  currentPage: string = MenuItems.Customers;
   handleMenuSelection(selectedPage: string) {
     this.currentPage = selectedPage; // Update the current page
   }

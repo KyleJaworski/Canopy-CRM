@@ -13,8 +13,27 @@
 
   <!--Employee Org-->
   <div
+    *ngIf="selectedCustomer === null && addCustomer === false"
     class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
   >
     <app-customers-overview></app-customers-overview>
+  </div>
+
+  <!-- Employee Info Container -->
+  <div
+    *ngIf="selectedCustomer != null || addCustomer"
+    class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+    [ngClass]="addCustomer ? 'lg:col-span-full' : 'lg:col-span-3'"
+  >
+    <app-tab-bar
+      [editObject]="selectedCustomer"
+      [tabItems]="tabItems"
+      [objectType]="objectType"
+      (selectedTab)="handleTabSelection($event)"
+    ></app-tab-bar>
+    <app-customer-info
+      [customer]="selectedCustomer"
+      *ngIf="tabItems[0].active"
+    ></app-customer-info>
   </div>
 </div>
