@@ -14,24 +14,34 @@ export class CustomerService {
   mockCustomers$ = this.mockCustomersSubject.asObservable();
 
   constructor() {
-    // Load initial data from sessionStorage if available and in browser environment
     if (this.isBrowser()) {
-      // Load from sessionStorage (if available)
       const storedCustomers = sessionStorage.getItem('mockCustomers');
       const initialCustomers = storedCustomers
-        ? JSON.parse(storedCustomers)
+        ? JSON.parse(storedCustomers, (key, value) =>
+            key === 'createdDate' && typeof value === 'string'
+              ? new Date(value)
+              : value
+          )
         : this.getDefaultMockCustomers();
 
-      // Initialize sessionStorage only once
       if (!storedCustomers) {
-        sessionStorage.setItem(
-          'mockCustomers',
-          JSON.stringify(initialCustomers)
-        );
+        this.saveTosessionStorage(initialCustomers);
       }
 
-      // Push to subscribers
       this.mockCustomersSubject.next(initialCustomers);
+    }
+  }
+
+  private saveTosessionStorage(customers: Customer[]): void {
+    if (this.isBrowser()) {
+      sessionStorage.setItem(
+        'mockCustomers',
+        JSON.stringify(customers, (key, value) =>
+          key === 'createdDate' && value instanceof Date
+            ? value.toISOString()
+            : value
+        )
+      );
     }
   }
 
@@ -48,7 +58,7 @@ export class CustomerService {
   }
 
   updateCustomer(customerToUpdate: Customer) {
-    const currentCustomers = this.mockCustomersSubject.value; // Get the current value of mockCustomers
+    const currentCustomers = this.mockCustomersSubject.value;
 
     const index = currentCustomers.findIndex(
       (cust) => cust.customerId === customerToUpdate.customerId
@@ -61,16 +71,8 @@ export class CustomerService {
         ...customerToUpdate,
       };
 
-      // Emit the updated Customers array
       this.mockCustomersSubject.next(updatedCustomers);
-
-      // Save to sessionStorage if in the browser
-      if (this.isBrowser()) {
-        sessionStorage.setItem(
-          'mockCustomers',
-          JSON.stringify(updatedCustomers)
-        );
-      }
+      this.saveTosessionStorage(updatedCustomers); // 🔥 Fix: Save properly formatted data
     }
   }
 
