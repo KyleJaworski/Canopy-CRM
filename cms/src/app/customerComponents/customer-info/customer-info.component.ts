@@ -131,9 +131,15 @@ export class CustomerInfoComponent implements OnChanges {
     if (customer.customerId) {
       this.customerService.updateCustomer(customer);
     } else {
+      const today = new Date();
       this.customerService.addCustomer({
         ...customer,
         customerId: this.customerService.generateUniqueCustomerId(),
+        createdDate: new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate()
+        ),
         isActive: true,
       });
       this.customerService.flipAddCustomer();
