@@ -1,5 +1,12 @@
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Customer } from '../../models/customer';
 import { CustomerService } from '../../services/customer/customer.service';
@@ -22,7 +29,7 @@ import { TabItem } from '../../models/tabItems';
   templateUrl: './customer-layout.component.html',
   styleUrl: './customer-layout.component.scss',
 })
-export class CustomerLayoutComponent {
+export class CustomerLayoutComponent implements OnDestroy {
   addCustomer: boolean = false;
   selectedCustomer: Customer | null = null;
   listItems: ListItem[] = [];
@@ -35,19 +42,30 @@ export class CustomerLayoutComponent {
     { label: 'Misc.', active: false, value: 2, indicator: 1 },
   ];
 
+  private subscriptions: Subscription = new Subscription();
+
   constructor(private customerService: CustomerService) {}
 
   //On init subscribe to changes in Customers and convert them into a list to be passed to the list component
   ngOnInit(): void {
-    this.customerService.mockCustomers$.subscribe((customers: Customer[]) => {
-      // Cache customers and transform them into listItems
-      this.customers = customers;
-      this.listItems = updateListItems(customers, ObjectType.Customer); // Update listItems whenever customers change
-    });
-    //Subscribe to if customer needs to be added
-    this.customerService.addCustomerBool$.subscribe((value: boolean) => {
-      this.addCustomer = value;
-    });
+    this.subscriptions.add(
+      this.customerService.mockCustomers$.subscribe((customers: Customer[]) => {
+        this.customers = customers;
+        this.listItems = updateListItems(customers, ObjectType.Customer);
+      })
+    );
+
+    this.subscriptions.add(
+      this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+        this.addCustomer = value;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Properly unsubscribe from all subscriptions
+    this.subscriptions.unsubscribe();
+    if (this.addCustomer === true) this.customerService.flipAddCustomer();
   }
 
   //When list item selected find customer who matches list item ID

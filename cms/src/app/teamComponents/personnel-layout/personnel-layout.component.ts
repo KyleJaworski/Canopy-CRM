@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
 import { EmployeeInfoComponent } from '../personnel-info/personnel-info.component';
@@ -8,6 +8,7 @@ import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../../models/employee';
 import { TabItem } from '../../models/tabItems';
 import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-layout',
@@ -21,7 +22,7 @@ import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
   templateUrl: './personnel-layout.component.html',
   styleUrl: './personnel-layout.component.scss',
 })
-export class TeamLayoutComponent {
+export class TeamLayoutComponent implements OnDestroy {
   // State variables
   selectedEmployee: Employee | null = null;
   addEmployee: boolean = false;
@@ -35,19 +36,26 @@ export class TeamLayoutComponent {
     { label: 'Contact Information', active: true, value: 1, indicator: 0 },
     { label: 'Privileges', active: false, value: 2, indicator: 1 },
   ];
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
     // Handle changes to addEmployee state
-    this.loading = true;
-    this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
-      this.selectedEmployee = this.selectedEmployee;
-      this.addEmployee = value;
-    });
+    this.subscriptions.add(
+      this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
+        this.selectedEmployee = this.selectedEmployee;
+        this.addEmployee = value;
+      })
+    );
 
-    this.clearData();
     this.fetchEmployees();
+  }
+
+  ngOnDestroy(): void {
+    // Properly unsubscribe from all subscriptions
+    this.subscriptions.unsubscribe();
+    if (this.addEmployee === true) this.employeeService.flipAddEmployee();
   }
 
   // Handle tab selection
@@ -74,11 +82,6 @@ export class TeamLayoutComponent {
     }
   }
 
-  // Handle "add employee" action
-  onAddEmployeeRecieved(add: boolean): void {
-    this.addEmployee = add;
-  }
-
   fetchEmployees(): void {
     // Update employees and listItems whenever employees change
     this.employeeService.mockEmployees$.subscribe((employees) => {
@@ -101,10 +104,5 @@ export class TeamLayoutComponent {
       this.employees = [...employees];
     });
     this.loading = false;
-  }
-  clearData(): void {
-    this.loading = true;
-    this.employees = [];
-    this.listItems = [];
   }
 }

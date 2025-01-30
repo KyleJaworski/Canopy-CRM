@@ -107,22 +107,20 @@ export class CustomerInfoComponent implements OnChanges {
       .get('phoneNumber')
       ?.setValue(formatted, { emitEvent: false });
   }
-  /*
+
   // Handle cancel operation
   onCancel(): void {
     this.customerForm.reset();
     this.repositionForm();
-    this.customerService.flipAddcustomer();
+    this.customerService.flipAddCustomer();
   }
 
   // Handle form submission
   onSubmit(): void {
     const formValues = this.customerForm.value;
-    const { directReportId, streetAddress, city, postalCode, ...rest } =
-      formValues;
+    const { streetAddress, city, postalCode, ...rest } = formValues;
     const customer: Customer = {
       ...rest,
-      directReportId: Number(directReportId),
       address: {
         street: streetAddress,
         city: city,
@@ -131,16 +129,16 @@ export class CustomerInfoComponent implements OnChanges {
     };
 
     if (customer.customerId) {
-      this.customerService.updatecustomer(customer);
+      this.customerService.updateCustomer(customer);
     } else {
-      this.customerService.addcustomer({
+      this.customerService.addCustomer({
         ...customer,
-        customerId: this.customerService.generateUniqueCusotmerId(),
+        customerId: this.customerService.generateUniqueCustomerId(),
         isActive: true,
       });
-      this.customerService.flipAddcustomer();
+      this.customerService.flipAddCustomer();
+      console.log('onsubmit');
     }
     this.repositionForm();
   }
-    */
 }

@@ -542,6 +542,7 @@
     </button>
     <button
       type="submit"
+      [disabled]="employeeForm.invalid"
       [ngClass]="
         employeeForm.invalid
           ? 'bg-indigo-400'

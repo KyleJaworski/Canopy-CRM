@@ -1,4 +1,4 @@
-<form [formGroup]="customerForm">
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
   <div class="space-y-12 overflow-y-auto" id="form-top">
     <div class="border-b border-gray-900/10 pb-12">
       <h2 class="text-base/7 font-semibold text-gray-900">
@@ -302,6 +302,7 @@
 
   <div class="mt-6 flex items-center justify-end gap-x-6">
     <button
+      (click)="onCancel()"
       type="button"
       class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
     >
@@ -309,6 +310,7 @@
     </button>
     <button
       type="submit"
+      [disabled]="customerForm.invalid"
       [ngClass]="
         customerForm.invalid
           ? 'bg-indigo-400'
