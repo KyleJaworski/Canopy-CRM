@@ -1,10 +1,5 @@
 import { Employee } from './employee';
 import { Customer } from './customer';
-import {
-  differenceInYears,
-  differenceInMonths,
-  differenceInDays,
-} from 'date-fns';
 
 export enum ObjectType {
   Customer = 'Customer',
@@ -29,39 +24,12 @@ export function updateListItems(
   return itemList.map((item) => {
     if (objectType === ObjectType.Customer) {
       const customer = item as Customer;
-      const dateAdded = new Date(customer.createdDate); // Ensure date is a Date object
-      const now = new Date();
-
-      // Calculate time differences
-      let years = differenceInYears(now, dateAdded);
-      let months = differenceInMonths(now, dateAdded) % 12;
-      let days = differenceInDays(now, dateAdded) % 30;
-      let weeks = Math.ceil(days / 7); // Convert days to weeks and round up
-
-      // Determine which two highest values to display
-      let timeSinceAdded = '';
-
-      if (years > 0) {
-        timeSinceAdded = `${years} year${years > 1 ? 's' : ''}`;
-        if (months > 0) {
-          months = months + 1; // Round up months
-          timeSinceAdded += `, ${months} month${months > 1 ? 's' : ''}`;
-        }
-      } else if (months > 0) {
-        timeSinceAdded = `${months} month${months > 1 ? 's' : ''}`;
-        if (weeks > 0) {
-          weeks = weeks + 1; // Round up weeks
-          timeSinceAdded += `, ${weeks} week${weeks > 1 ? 's' : ''}`;
-        }
-      } else {
-        timeSinceAdded = `${weeks} week${weeks > 1 ? 's' : ''}`;
-      }
       return {
         id: customer.customerId,
         fullName: `${customer.firstName} ${customer.lastName}`,
         phoneNumber: customer.phoneNumber || 'N/A',
         email: customer.email || 'No Email',
-        additionalLabel: timeSinceAdded,
+        additionalLabel: '',
         objectType: ObjectType.Customer,
         isActive: customer.isActive,
       };
