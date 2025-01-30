@@ -15,20 +15,17 @@ export class EmployeeService {
   mockEmployees$ = this.mockEmployeesSubject.asObservable();
 
   constructor() {
-    // Load initial data from sessionStorage if available and in browser environment
+    // Load initial data from localStorage if available and in browser environment
     if (this.isBrowser()) {
-      // Load from sessionStorage (if available)
-      const storedEmployees = sessionStorage.getItem('mockEmployees');
+      // Load from localStorage (if available)
+      const storedEmployees = localStorage.getItem('mockEmployees');
       const initialEmployees = storedEmployees
         ? JSON.parse(storedEmployees)
         : this.getDefaultMockEmployees();
 
-      // Initialize sessionStorage only once
+      // Initialize localStorage only once
       if (!storedEmployees) {
-        sessionStorage.setItem(
-          'mockEmployees',
-          JSON.stringify(initialEmployees)
-        );
+        localStorage.setItem('mockEmployees', JSON.stringify(initialEmployees));
       }
 
       // Push to subscribers
@@ -38,9 +35,7 @@ export class EmployeeService {
 
   // Check if code is running in the browser
   private isBrowser(): boolean {
-    return (
-      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
-    );
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
   }
 
   // Method to toggle or update the state
@@ -72,12 +67,9 @@ export class EmployeeService {
         ...employeeToUpdate,
       };
 
-      // Save to sessionStorage if in the browser
+      // Save to localStorage if in the browser
       if (this.isBrowser()) {
-        sessionStorage.setItem(
-          'mockEmployees',
-          JSON.stringify(updatedEmployees)
-        );
+        localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
       }
       // Emit the updated Employees array
       this.mockEmployeesSubject.next(updatedEmployees);
@@ -89,7 +81,7 @@ export class EmployeeService {
     const updatedEmployees = [...currentEmployees, newEmployee];
 
     if (this.isBrowser()) {
-      sessionStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
+      localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
     }
     this.mockEmployeesSubject.next(updatedEmployees);
   }
@@ -101,7 +93,7 @@ export class EmployeeService {
     );
 
     if (this.isBrowser()) {
-      sessionStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
+      localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
     }
     this.mockEmployeesSubject.next(updatedEmployees);
   }

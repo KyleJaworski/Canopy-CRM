@@ -14,20 +14,17 @@ export class CustomerService {
   mockCustomers$ = this.mockCustomersSubject.asObservable();
 
   constructor() {
-    // Load initial data from sessionStorage if available and in browser environment
+    // Load initial data from localStorage if available and in browser environment
     if (this.isBrowser()) {
-      // Load from sessionStorage (if available)
-      const storedCustomers = sessionStorage.getItem('mockCustomers');
+      // Load from localStorage (if available)
+      const storedCustomers = localStorage.getItem('mockCustomers');
       const initialCustomers = storedCustomers
         ? JSON.parse(storedCustomers)
         : this.getDefaultMockCustomers();
 
-      // Initialize sessionStorage only once
+      // Initialize localStorage only once
       if (!storedCustomers) {
-        sessionStorage.setItem(
-          'mockCustomers',
-          JSON.stringify(initialCustomers)
-        );
+        localStorage.setItem('mockCustomers', JSON.stringify(initialCustomers));
       }
 
       // Push to subscribers
@@ -37,9 +34,7 @@ export class CustomerService {
 
   // Check if code is running in the browser
   private isBrowser(): boolean {
-    return (
-      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
-    );
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
   }
 
   // Method to toggle or update the state
@@ -64,12 +59,9 @@ export class CustomerService {
       // Emit the updated Customers array
       this.mockCustomersSubject.next(updatedCustomers);
 
-      // Save to sessionStorage if in the browser
+      // Save to localStorage if in the browser
       if (this.isBrowser()) {
-        sessionStorage.setItem(
-          'mockCustomers',
-          JSON.stringify(updatedCustomers)
-        );
+        localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
       }
     }
   }
@@ -91,7 +83,7 @@ export class CustomerService {
     );
 
     if (this.isBrowser()) {
-      sessionStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
+      localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
     }
     this.mockCustomersSubject.next(updatedCustomers);
   }
@@ -99,11 +91,11 @@ export class CustomerService {
     const currentCustomers = this.mockCustomersSubject.value;
     const updatedCustomers = [...currentCustomers, newCustomer];
 
-    // Emit the updated array and save to sessionStorage
+    // Emit the updated array and save to localStorage
     this.mockCustomersSubject.next(updatedCustomers);
 
     if (this.isBrowser()) {
-      sessionStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
+      localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
     }
   }
 
