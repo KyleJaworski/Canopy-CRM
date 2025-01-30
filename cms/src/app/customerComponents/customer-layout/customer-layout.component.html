@@ -3,17 +3,29 @@
 >
   <!-- Employee List Container -->
   <div
+    *ngIf="!addCustomer"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
-    <app-person-list
-      (selectedlistItem)="onSelectedCustomerRecieved($event)"
-      [listItems]="listItems"
-    ></app-person-list>
+    <ng-container *ngIf="listItems.length === 0; elseBlock">
+      <div class="flex justify-center items-center h-full w-full">
+        <img
+          src="assets/icons/icons8-list-100.png"
+          alt="No items"
+          class="w-24 h-auto"
+        />
+      </div>
+    </ng-container>
+    <ng-container #elseBlock>
+      <app-person-list
+        (selectedlistItem)="onSelectedCustomerRecieved($event)"
+        [listItems]="listItems"
+      ></app-person-list>
+    </ng-container>
   </div>
 
   <!--Employee Org-->
   <div
-    *ngIf="selectedCustomer === null && addCustomer === false"
+    *ngIf="selectedCustomer === null && !addCustomer"
     class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
   >
     <app-customers-overview></app-customers-overview>

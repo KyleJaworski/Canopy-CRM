@@ -6,7 +6,7 @@
     *ngIf="!addEmployee"
     class="p-px lg:col-span-1 lg:row-span-full rounded-lg bg-white py-4 shadow-lg mb-4"
   >
-    <ng-container *ngIf="listItems.length === 0">
+    <ng-container *ngIf="listItems.length === 0; elseBlock">
       <div class="flex justify-center items-center h-full w-full">
         <img
           src="assets/icons/icons8-list-100.png"
@@ -16,46 +16,48 @@
       </div>
     </ng-container>
 
-    <ng-container>
+    <ng-container #elseBlock>
       <app-person-list
         [listItems]="listItems"
         (selectedlistItem)="onSelectedEmployeeRecieved($event)"
       ></app-person-list>
     </ng-container>
   </div>
+  <!--Either Org Chart or Customer Info-->
+  <ng-container>
+    <!--Employee Org-->
+    <div
+      class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+      *ngIf="selectedEmployee === null && !addEmployee"
+    >
+      <ng-container *ngIf="listItems.length === 0; showChart">
+        <div class="flex justify-center items-center h-full w-full">
+          <img
+            src="assets/icons/icons8-hierarchy-100-2.png"
+            alt="No items"
+            class="w-24 h-auto"
+          />
+        </div>
+      </ng-container>
+      <app-employees-overview #showChart></app-employees-overview>
+    </div>
 
-  <!--Employee Org-->
-  <div
-    class="p-px lg:row-span-full lg:col-span-3 rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
-    *ngIf="selectedEmployee === null && addEmployee === false"
-  >
-    <ng-container *ngIf="listItems.length === 0; showChart">
-      <div class="flex justify-center items-center h-full w-full">
-        <img
-          src="assets/icons/icons8-hierarchy-100-2.png"
-          alt="No items"
-          class="w-24 h-auto"
-        />
-      </div>
-    </ng-container>
-    <app-employees-overview #showChart></app-employees-overview>
-  </div>
-
-  <!-- Employee Info Container -->
-  <div
-    *ngIf="selectedEmployee != null || addEmployee"
-    class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
-    [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
-  >
-    <app-tab-bar
-      [editObject]="selectedEmployee"
-      [tabItems]="tabItems"
-      [objectType]="objectType"
-      (selectedTab)="handleTabSelection($event)"
-    ></app-tab-bar>
-    <app-employee-info
-      [employee]="selectedEmployee"
-      *ngIf="tabItems[0].active"
-    ></app-employee-info>
-  </div>
+    <!-- CustomerInfo Container -->
+    <div
+      *ngIf="selectedEmployee != null || addEmployee"
+      class="p-px lg:row-span-full rounded-lg bg-white px-7 py-4 shadow-lg sm:px-6 pb-4 mb-4 overflow-auto"
+      [ngClass]="addEmployee ? 'lg:col-span-full' : 'lg:col-span-3'"
+    >
+      <app-tab-bar
+        [editObject]="selectedEmployee"
+        [tabItems]="tabItems"
+        [objectType]="objectType"
+        (selectedTab)="handleTabSelection($event)"
+      ></app-tab-bar>
+      <app-employee-info
+        [employee]="selectedEmployee"
+        *ngIf="tabItems[0].active"
+      ></app-employee-info>
+    </div>
+  </ng-container>
 </div>

@@ -44,6 +44,10 @@ export class CustomerLayoutComponent {
       this.customers = customers;
       this.listItems = updateListItems(customers, ObjectType.Customer); // Update listItems whenever customers change
     });
+    //Subscribe to if customer needs to be added
+    this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+      this.addCustomer = value;
+    });
   }
 
   //When list item selected find customer who matches list item ID
