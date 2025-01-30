@@ -11,6 +11,7 @@ export interface Customer {
   };
   isActive: boolean; // Optional field
   dateOfBirth?: Date; // Optional field
+  createdDate: Date;
 }
 
 export class CustomerFactory {
@@ -28,6 +29,7 @@ export class CustomerFactory {
       },
       isActive: overrides.isActive ?? true, // Default to active
       dateOfBirth: overrides.dateOfBirth,
+      createdDate: overrides.createdDate!,
     };
   }
 }

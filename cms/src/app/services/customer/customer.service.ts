@@ -134,6 +134,7 @@ export class CustomerService {
           postalCode: '12345',
         },
         isActive: true,
+        createdDate: new Date(2024, 3, 24),
       },
       {
         customerId: 2,
@@ -147,6 +148,7 @@ export class CustomerService {
           postalCode: '43211',
         },
         isActive: true,
+        createdDate: new Date(2024, 4, 1),
       },
       {
         customerId: 3,
@@ -160,6 +162,7 @@ export class CustomerService {
           postalCode: '43211',
         },
         isActive: true,
+        createdDate: new Date(2024, 1, 10),
       },
       {
         customerId: 4,
@@ -173,6 +176,7 @@ export class CustomerService {
           postalCode: '43211',
         },
         isActive: true,
+        createdDate: new Date(2022, 10, 10),
       },
     ];
   }
