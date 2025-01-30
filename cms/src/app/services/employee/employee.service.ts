@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Employee, TeamRole } from '../../models/employee';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
-  private addEmployeeBool = new BehaviorSubject<boolean>(false); // Default value is false
+  private addEmployeeBool = new BehaviorSubject<boolean>(false);
   private mockEmployeesSubject = new BehaviorSubject<Employee[]>([]);
 
   // Observable for components to subscribe to
@@ -15,30 +14,42 @@ export class EmployeeService {
   mockEmployees$ = this.mockEmployeesSubject.asObservable();
 
   constructor() {
-    // Load initial data from localStorage if available and in browser environment
     if (this.isBrowser()) {
-      // Load from localStorage (if available)
-      const storedEmployees = localStorage.getItem('mockEmployees');
+      // Load employees from sessionStorage
+      const storedEmployees = sessionStorage.getItem('mockEmployees');
       const initialEmployees = storedEmployees
-        ? JSON.parse(storedEmployees)
+        ? JSON.parse(storedEmployees, (key, value) =>
+            key === 'createdDate' ? new Date(value) : value
+          )
         : this.getDefaultMockEmployees();
 
-      // Initialize localStorage only once
       if (!storedEmployees) {
-        localStorage.setItem('mockEmployees', JSON.stringify(initialEmployees));
+        this.saveToSessionStorage(initialEmployees);
       }
 
-      // Push to subscribers
       this.mockEmployeesSubject.next(initialEmployees);
     }
   }
 
-  // Check if code is running in the browser
   private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+    return (
+      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
+    );
   }
 
-  // Method to toggle or update the state
+  private saveToSessionStorage(employees: Employee[]): void {
+    if (this.isBrowser()) {
+      sessionStorage.setItem(
+        'mockEmployees',
+        JSON.stringify(employees, (key, value) =>
+          key === 'createdDate' && value instanceof Date
+            ? value.toISOString()
+            : value
+        )
+      );
+    }
+  }
+
   flipAddEmployee(): void {
     this.addEmployeeBool.next(!this.addEmployeeBool.value);
   }
@@ -54,8 +65,7 @@ export class EmployeeService {
   }
 
   updateEmployee(employeeToUpdate: Employee) {
-    const currentEmployees = this.mockEmployeesSubject.value; // Get the current value of mockEmployees
-
+    const currentEmployees = this.mockEmployeesSubject.value;
     const index = currentEmployees.findIndex(
       (emp) => emp.employeeId === employeeToUpdate.employeeId
     );
@@ -67,11 +77,7 @@ export class EmployeeService {
         ...employeeToUpdate,
       };
 
-      // Save to localStorage if in the browser
-      if (this.isBrowser()) {
-        localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
-      }
-      // Emit the updated Employees array
+      this.saveToSessionStorage(updatedEmployees);
       this.mockEmployeesSubject.next(updatedEmployees);
     }
   }
@@ -80,9 +86,7 @@ export class EmployeeService {
     const currentEmployees = this.mockEmployeesSubject.value;
     const updatedEmployees = [...currentEmployees, newEmployee];
 
-    if (this.isBrowser()) {
-      localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
-    }
+    this.saveToSessionStorage(updatedEmployees);
     this.mockEmployeesSubject.next(updatedEmployees);
   }
 
@@ -92,31 +96,26 @@ export class EmployeeService {
       (employee) => employee.employeeId !== emp.employeeId
     );
 
-    if (this.isBrowser()) {
-      localStorage.setItem('mockEmployees', JSON.stringify(updatedEmployees));
-    }
+    this.saveToSessionStorage(updatedEmployees);
     this.mockEmployeesSubject.next(updatedEmployees);
   }
 
   getMockEmployees(): Employee[] {
-    return this.mockEmployeesSubject.value; // Get the current value of mockEmployees
+    return this.mockEmployeesSubject.value;
   }
 
   generateUniqueEmployeeId(): number {
-    const currentEmployees = this.getMockEmployees(); // Get current employees
-    const existingIds = new Set(currentEmployees.map((emp) => emp.employeeId)); // Store all existing IDs in a Set
+    const currentEmployees = this.getMockEmployees();
+    const existingIds = new Set(currentEmployees.map((emp) => emp.employeeId));
 
     let newId: number;
-
-    // Generate a new ID until it's unique
     do {
-      newId = Math.floor(Math.random() * 10000) + 1; // Random number between 1 and 10000
+      newId = Math.floor(Math.random() * 10000) + 1;
     } while (existingIds.has(newId));
 
     return newId;
   }
 
-  // Default mockEmployees
   private getDefaultMockEmployees(): Employee[] {
     return [
       {
@@ -140,12 +139,12 @@ export class EmployeeService {
         directReportId: 1,
         firstName: 'Britt',
         lastName: 'Flourladie',
-        jobTitle: 'Schedular',
+        jobTitle: 'Scheduler',
         teamRole: TeamRole.Coordinator,
         email: 'info@treedaddies.com',
         phoneNumber: '465-754-7958',
         address: {
-          street: '23542 harrow road',
+          street: '23542 Harrow Road',
           city: 'Lafayette',
           postalCode: '43211',
         },

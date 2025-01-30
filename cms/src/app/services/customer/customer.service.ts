@@ -6,45 +6,55 @@ import { Customer } from '../../models/customer';
   providedIn: 'root',
 })
 export class CustomerService {
-  private addCustomerBool = new BehaviorSubject<boolean>(false); // Default value is false
+  private addCustomerBool = new BehaviorSubject<boolean>(false);
   private mockCustomersSubject = new BehaviorSubject<Customer[]>([]);
 
-  // Observable for components to subscribe to
+  // Observables for components to subscribe to
   addCustomerBool$ = this.addCustomerBool.asObservable();
   mockCustomers$ = this.mockCustomersSubject.asObservable();
 
   constructor() {
-    // Load initial data from localStorage if available and in browser environment
     if (this.isBrowser()) {
-      // Load from localStorage (if available)
-      const storedCustomers = localStorage.getItem('mockCustomers');
+      const storedCustomers = sessionStorage.getItem('mockCustomers');
       const initialCustomers = storedCustomers
-        ? JSON.parse(storedCustomers)
+        ? JSON.parse(storedCustomers, (key, value) =>
+            key === 'createdDate' ? new Date(value) : value
+          )
         : this.getDefaultMockCustomers();
 
-      // Initialize localStorage only once
       if (!storedCustomers) {
-        localStorage.setItem('mockCustomers', JSON.stringify(initialCustomers));
+        this.saveToSessionStorage(initialCustomers);
       }
 
-      // Push to subscribers
       this.mockCustomersSubject.next(initialCustomers);
     }
   }
 
-  // Check if code is running in the browser
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  private saveToSessionStorage(customers: Customer[]): void {
+    if (this.isBrowser()) {
+      sessionStorage.setItem(
+        'mockCustomers',
+        JSON.stringify(customers, (key, value) =>
+          key === 'createdDate' && value instanceof Date
+            ? value.toISOString()
+            : value
+        )
+      );
+    }
   }
 
-  // Method to toggle or update the state
+  private isBrowser(): boolean {
+    return (
+      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
+    );
+  }
+
   flipAddCustomer(): void {
     this.addCustomerBool.next(!this.addCustomerBool.value);
   }
 
   updateCustomer(customerToUpdate: Customer) {
-    const currentCustomers = this.mockCustomersSubject.value; // Get the current value of mockCustomers
-
+    const currentCustomers = this.mockCustomersSubject.value;
     const index = currentCustomers.findIndex(
       (cust) => cust.customerId === customerToUpdate.customerId
     );
@@ -56,13 +66,8 @@ export class CustomerService {
         ...customerToUpdate,
       };
 
-      // Emit the updated Customers array
       this.mockCustomersSubject.next(updatedCustomers);
-
-      // Save to localStorage if in the browser
-      if (this.isBrowser()) {
-        localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
-      }
+      this.saveToSessionStorage(updatedCustomers);
     }
   }
 
@@ -82,44 +87,36 @@ export class CustomerService {
       (customer) => customer.customerId !== cust.customerId
     );
 
-    if (this.isBrowser()) {
-      localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
-    }
+    this.saveToSessionStorage(updatedCustomers);
     this.mockCustomersSubject.next(updatedCustomers);
   }
+
   addCustomer(newCustomer: Customer): void {
     const currentCustomers = this.mockCustomersSubject.value;
     const updatedCustomers = [...currentCustomers, newCustomer];
 
-    // Emit the updated array and save to localStorage
+    this.saveToSessionStorage(updatedCustomers);
     this.mockCustomersSubject.next(updatedCustomers);
-
-    if (this.isBrowser()) {
-      localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
-    }
   }
 
   getMockCustomers(): Customer[] {
-    return this.mockCustomersSubject.value; // Get the current value of mockCustomers
+    return this.mockCustomersSubject.value;
   }
 
   generateUniqueCustomerId(): number {
-    const currentCustomers = this.getMockCustomers(); // Get current Customers
+    const currentCustomers = this.getMockCustomers();
     const existingIds = new Set(
       currentCustomers.map((cust) => cust.customerId)
-    ); // Store all existing IDs in a Set
+    );
 
     let newId: number;
-
-    // Generate a new ID until it's unique
     do {
-      newId = Math.floor(Math.random() * 10000) + 1; // Random number between 1 and 10000
+      newId = Math.floor(Math.random() * 10000) + 1;
     } while (existingIds.has(newId));
 
     return newId;
   }
 
-  // Default mockCustomers
   private getDefaultMockCustomers(): Customer[] {
     return [
       {
@@ -134,7 +131,7 @@ export class CustomerService {
           postalCode: '12345',
         },
         isActive: true,
-        createdDate: new Date(2024, 3, 24),
+        createdDate: new Date(2024, 3, 24), // Ensured as Date object
       },
       {
         customerId: 2,
@@ -143,7 +140,7 @@ export class CustomerService {
         email: 'no@gmail.com',
         phoneNumber: '465-754-7958',
         address: {
-          street: '23542 harrow road',
+          street: '23542 Harrow Road',
           city: 'Lafayette',
           postalCode: '43211',
         },
@@ -157,7 +154,7 @@ export class CustomerService {
         email: 'no@gmail.com',
         phoneNumber: '465-754-7958',
         address: {
-          street: '23542 harrow road',
+          street: '23542 Harrow Road',
           city: 'Lafayette',
           postalCode: '43211',
         },
@@ -171,7 +168,7 @@ export class CustomerService {
         email: 'no@gmail.com',
         phoneNumber: '465-754-7958',
         address: {
-          street: '23542 harrow road',
+          street: '23542 Harrow Road',
           city: 'Lafayette',
           postalCode: '43211',
         },

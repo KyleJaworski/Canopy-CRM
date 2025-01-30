@@ -17,20 +17,37 @@ export class MeetingService {
   mockMeetings$ = this.mockMeetingsSubject.asObservable();
 
   constructor(private customerService: CustomerService) {
-    // Load initial data from localStorage if available and in browser environment
-    const storedMeetings = this.isBrowser()
-      ? localStorage.getItem('mockMeetings')
-      : null;
-    const initialMeetings = storedMeetings
-      ? JSON.parse(storedMeetings)
-      : this.getDefaultMockMeetings();
+    if (this.isBrowser()) {
+      // Load meetings from sessionStorage
+      const storedMeetings = sessionStorage.getItem('mockMeetings');
+      const initialMeetings = storedMeetings
+        ? JSON.parse(storedMeetings, (key, value) =>
+            key === 'date' ? new Date(value) : value
+          )
+        : this.getDefaultMockMeetings();
 
-    this.mockMeetingsSubject.next(initialMeetings);
+      // If no stored meetings exist, save defaults
+      if (!storedMeetings) {
+        this.saveToSessionStorage(initialMeetings);
+      }
+
+      // Emit the initial meetings to the BehaviorSubject
+      this.mockMeetingsSubject.next(initialMeetings);
+    }
+  }
+
+  // Utility function to save meetings to sessionStorage
+  private saveToSessionStorage(meetings: Meeting[]): void {
+    if (this.isBrowser()) {
+      sessionStorage.setItem('mockMeetings', JSON.stringify(meetings));
+    }
   }
 
   // Check if code is running in the browser
   private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+    return (
+      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
+    );
   }
 
   // Method to toggle or update the state
@@ -55,9 +72,9 @@ export class MeetingService {
       // Emit the updated Customers array
       this.mockMeetingsSubject.next(updatedMeetings);
 
-      // Save to localStorage if in the browser
+      // Save to sessionStorage if in the browser
       if (this.isBrowser()) {
-        localStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
+        sessionStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
       }
     }
   }
@@ -66,11 +83,11 @@ export class MeetingService {
     const currentMeetings = this.mockMeetingsSubject.value;
     const updatedMeetings = [...currentMeetings, newMeeting];
 
-    // Emit the updated array and save to localStorage
+    // Emit the updated array and save to sessionStorage
     this.mockMeetingsSubject.next(updatedMeetings);
 
     if (this.isBrowser()) {
-      localStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
+      sessionStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
     }
   }
 
