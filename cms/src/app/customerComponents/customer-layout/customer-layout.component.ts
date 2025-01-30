@@ -60,11 +60,13 @@ export class CustomerLayoutComponent implements OnDestroy {
         this.addCustomer = value;
       })
     );
+    this.fetchCustomers();
   }
 
   ngOnDestroy(): void {
     // Properly unsubscribe from all subscriptions
     this.subscriptions.unsubscribe();
+    // Reset addCustomer
     if (this.addCustomer === true) this.customerService.flipAddCustomer();
   }
 
@@ -85,5 +87,30 @@ export class CustomerLayoutComponent implements OnDestroy {
   // Handle tab selection
   handleTabSelection(selectedTab: TabItem): void {
     this.tabItems.forEach((tab) => (tab.active = tab === selectedTab));
+  }
+
+  fetchCustomers(): void {
+    // Update customers and listItems whenever customers change
+    this.subscriptions.add(
+      this.customerService.mockCustomers$.subscribe((customers) => {
+        // Check if the selectedCustomer still exists in the customers list
+        if (this.selectedCustomer) {
+          const isSelectedcustomerValid = customers.some(
+            (customer) =>
+              customer.customerId === this.selectedCustomer?.customerId
+          );
+
+          // Set selectedcustomer to null if it's no longer in the customers list
+          this.selectedCustomer = isSelectedcustomerValid
+            ? this.selectedCustomer
+            : null;
+        }
+
+        // Update the list of customers and listItems
+
+        this.listItems = [...updateListItems(customers, ObjectType.Customer)];
+        this.customers = [...customers];
+      })
+    );
   }
 }

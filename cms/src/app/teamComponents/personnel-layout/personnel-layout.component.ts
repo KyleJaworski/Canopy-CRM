@@ -84,25 +84,27 @@ export class TeamLayoutComponent implements OnDestroy {
 
   fetchEmployees(): void {
     // Update employees and listItems whenever employees change
-    this.employeeService.mockEmployees$.subscribe((employees) => {
-      // Check if the selectedEmployee still exists in the employees list
-      if (this.selectedEmployee) {
-        const isSelectedEmployeeValid = employees.some(
-          (employee) =>
-            employee.employeeId === this.selectedEmployee?.employeeId
-        );
+    this.subscriptions.add(
+      this.employeeService.mockEmployees$.subscribe((employees) => {
+        // Check if the selectedEmployee still exists in the employees list
+        if (this.selectedEmployee) {
+          const isSelectedEmployeeValid = employees.some(
+            (employee) =>
+              employee.employeeId === this.selectedEmployee?.employeeId
+          );
 
-        // Set selectedEmployee to null if it's no longer in the employees list
-        this.selectedEmployee = isSelectedEmployeeValid
-          ? this.selectedEmployee
-          : null;
-      }
+          // Set selectedEmployee to null if it's no longer in the employees list
+          this.selectedEmployee = isSelectedEmployeeValid
+            ? this.selectedEmployee
+            : null;
+        }
 
-      // Update the list of employees and listItems
+        // Update the list of employees and listItems
 
-      this.listItems = [...updateListItems(employees, ObjectType.Employee)];
-      this.employees = [...employees];
-    });
+        this.listItems = [...updateListItems(employees, ObjectType.Employee)];
+        this.employees = [...employees];
+      })
+    );
     this.loading = false;
   }
 }
