@@ -57,7 +57,7 @@ export class TabBarComponent {
     if (action === PopupAction.Delete) {
       this.popupWarning.heading = 'Delete Account';
       this.popupWarning.body =
-        'Are you sure you want to delete this account? All of your data will be permnanently removed. This action cannot be undone';
+        'Are you sure you want to delete this account? All account data will be permnanently removed. This action cannot be undone';
       this.popupWarning.action = PopupAction.Delete;
     }
     if (action === PopupAction.Deactivate) {
@@ -80,14 +80,22 @@ export class TabBarComponent {
   }
 
   confirmPopup(): void {
+    const action = this.popupWarning.action;
     if (this.objectType === ObjectType.Employee) {
-      const action = this.popupWarning.action;
       if (action === PopupAction.Deactivate) {
         this.employeeService.deactivateEmployee(this.editObject as Employee);
       } else if (action === PopupAction.Delete) {
         this.employeeService.deleteEmployee(this.editObject as Employee);
       } else if (action === PopupAction.Reactivate) {
         this.employeeService.activateEmployee(this.editObject as Employee);
+      }
+    } else if (this.objectType === ObjectType.Customer) {
+      if (action === PopupAction.Deactivate) {
+        this.customerService.deactivateCustomer(this.editObject as Customer);
+      } else if (action === PopupAction.Delete) {
+        this.customerService.deleteCustomer(this.editObject as Customer);
+      } else if (action === PopupAction.Reactivate) {
+        this.customerService.activateCustomer(this.editObject as Customer);
       }
     }
     this.closePopup();

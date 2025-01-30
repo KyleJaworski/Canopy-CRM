@@ -10,6 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { MenuItems } from '../../models/menuItems.enum';
+import { CustomerService } from '../../services/customer/customer.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -19,9 +20,11 @@ import { MenuItems } from '../../models/menuItems.enum';
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit {
+  menuItem = MenuItems;
   menuItems = Object.values(MenuItems); // Get the values of the enum
   isDropdownVisible = false;
-  addEmployee!: Boolean;
+  addEmployee!: boolean;
+  addCustomer!: boolean;
 
   @Output() menuOption = new EventEmitter<string>();
   activeMenuItem: MenuItems = MenuItems.Customers;
@@ -30,11 +33,17 @@ export class MenuBarComponent implements OnInit {
   @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;
   @ViewChild('userMenu', { static: true }) userMenu!: ElementRef;
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private customerService: CustomerService
+  ) {}
 
   ngOnInit(): void {
-    this.employeeService.addEmployeeBool$.subscribe((value: Boolean) => {
+    this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
       this.addEmployee = value;
+    });
+    this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+      this.addCustomer = value;
     });
   }
 
@@ -62,5 +71,9 @@ export class MenuBarComponent implements OnInit {
 
   toggleAddEmployee(): void {
     this.employeeService.flipAddEmployee(); // Toggle the value
+  }
+
+  toggleAddCustomer(): void {
+    this.customerService.flipAddCustomer(); // Toggle the value
   }
 }

@@ -31,30 +31,52 @@
           <!--Right Side of Nav Bar-->
           <div class="hidden md:block">
             <div class="mx-6 flex items-center md:mr-6">
-              <!-- New Employee Button -->
-              <button
-                [ngClass]="
-                  addEmployee == true ? 'bg-indigo-400' : 'bg-indigo-500'
-                "
-                [disabled]="addEmployee == true"
-                *ngIf="activeMenuItem == 'Personnel'"
-                (click)="toggleAddEmployee()"
-                type="button"
-                class="relative inline-flex items-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                <svg
-                  class="-ml-0.5 size-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  data-slot="icon"
+              <div class="flex space-x-4">
+                <!-- New Personnel Button -->
+                <button
+                  [ngClass]="addEmployee ? 'bg-indigo-400' : 'bg-indigo-500'"
+                  [disabled]="addEmployee"
+                  *ngIf="activeMenuItem == menuItem.Personnel"
+                  (click)="toggleAddEmployee()"
+                  type="button"
+                  class="relative inline-flex items-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 >
-                  <path
-                    d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
-                  />
-                </svg>
-                New Employee
-              </button>
+                  <svg
+                    class="-ml-0.5 size-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+                    />
+                  </svg>
+                  Personnel
+                </button>
+                <!-- New Customer Button -->
+                <button
+                  [ngClass]="addCustomer ? 'bg-indigo-400' : 'bg-indigo-500'"
+                  [disabled]="addCustomer"
+                  *ngIf="activeMenuItem == menuItem.Customers"
+                  (click)="toggleAddCustomer()"
+                  type="button"
+                  class="relative inline-flex items-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                >
+                  <svg
+                    class="-ml-0.5 size-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+                    />
+                  </svg>
+                  Customer
+                </button>
+              </div>
 
               <!-- Notification Button with spacing -->
               <button

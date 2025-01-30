@@ -15,14 +15,21 @@ export class CustomerService {
 
   constructor() {
     // Load initial data from localStorage if available and in browser environment
-    const storedCustomers = this.isBrowser()
-      ? localStorage.getItem('mockCustomers')
-      : null;
-    const initialCustomers = storedCustomers
-      ? JSON.parse(storedCustomers)
-      : this.getDefaultMockCustomers();
+    if (this.isBrowser()) {
+      // Load from localStorage (if available)
+      const storedCustomers = localStorage.getItem('mockCustomers');
+      const initialCustomers = storedCustomers
+        ? JSON.parse(storedCustomers)
+        : this.getDefaultMockCustomers();
 
-    this.mockCustomersSubject.next(initialCustomers);
+      // Initialize localStorage only once
+      if (!storedCustomers) {
+        localStorage.setItem('mockCustomers', JSON.stringify(initialCustomers));
+      }
+
+      // Push to subscribers
+      this.mockCustomersSubject.next(initialCustomers);
+    }
   }
 
   // Check if code is running in the browser
@@ -59,6 +66,27 @@ export class CustomerService {
     }
   }
 
+  deactivateCustomer(cust: Customer) {
+    const updatedCustomer = { ...cust, isActive: false };
+    this.updateCustomer(updatedCustomer);
+  }
+
+  activateCustomer(cust: Customer) {
+    const updatedCustomer = { ...cust, isActive: true };
+    this.updateCustomer(updatedCustomer);
+  }
+
+  deleteCustomer(cust: Customer) {
+    const currentCustomers = this.mockCustomersSubject.value;
+    const updatedCustomers = currentCustomers.filter(
+      (customer) => customer.customerId !== cust.customerId
+    );
+
+    if (this.isBrowser()) {
+      localStorage.setItem('mockCustomers', JSON.stringify(updatedCustomers));
+    }
+    this.mockCustomersSubject.next(updatedCustomers);
+  }
   addCustomer(newCustomer: Customer): void {
     const currentCustomers = this.mockCustomersSubject.value;
     const updatedCustomers = [...currentCustomers, newCustomer];
