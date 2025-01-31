@@ -27,6 +27,8 @@ export class MenuBarComponent implements OnInit {
   isDropdownVisible = false;
   addEmployee!: boolean;
   addCustomer!: boolean;
+  mobileMenuOpen: boolean = false;
+  mobileProfileOpen: boolean = false;
 
   @Input() activeMenuItem!: MenuItems;
   //@Output() menuOption = new EventEmitter<string>();
@@ -34,7 +36,11 @@ export class MenuBarComponent implements OnInit {
   // Access the button and menu using template references
   @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;
   @ViewChild('userMenu', { static: true }) userMenu!: ElementRef;
-
+  /*
+  @ViewChild('mobileUserMenuButton', { static: true })
+  mobileUserMenuButton!: ElementRef;
+  @ViewChild('mobileUserMenu', { static: true }) mobileUserMenu!: ElementRef;
+*/
   constructor(
     private employeeService: EmployeeService,
     private customerService: CustomerService,
@@ -60,14 +66,16 @@ export class MenuBarComponent implements OnInit {
   // Close dropdown on outside click
   @HostListener('document:click', ['$event'])
   closeDropdown(event: MouseEvent) {
-    const buttonElement = this.userMenuButton.nativeElement;
-    const menuElement = this.userMenu.nativeElement;
+    if (!this.mobileMenuOpen) {
+      const buttonElement = this.userMenuButton.nativeElement;
+      const menuElement = this.userMenu.nativeElement;
 
-    if (
-      !buttonElement.contains(event.target as Node) &&
-      !menuElement.contains(event.target as Node)
-    ) {
-      this.isDropdownVisible = false;
+      if (
+        !buttonElement.contains(event.target as Node) &&
+        !menuElement.contains(event.target as Node)
+      ) {
+        this.isDropdownVisible = false;
+      }
     }
   }
 
@@ -77,5 +85,13 @@ export class MenuBarComponent implements OnInit {
 
   toggleAddCustomer(): void {
     this.customerService.flipAddCustomer(); // Toggle the value
+  }
+
+  updateMobileMenuState(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  updateMobileProfileState(): void {
+    this.mobileProfileOpen = !this.mobileProfileOpen;
   }
 }
