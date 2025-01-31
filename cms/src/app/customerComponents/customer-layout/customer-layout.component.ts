@@ -60,7 +60,7 @@ export class CustomerLayoutComponent implements OnDestroy {
         this.addCustomer = value;
       })
     );
-    this.fetchCustomers();
+    //this.fetchCustomers();
   }
 
   ngOnDestroy(): void {
@@ -89,7 +89,7 @@ export class CustomerLayoutComponent implements OnDestroy {
     this.tabItems.forEach((tab) => (tab.active = tab === selectedTab));
   }
 
-  fetchCustomers(): void {
+  /*fetchCustomers(): void {
     // Update customers and listItems whenever customers change
     this.subscriptions.add(
       this.customerService.entities$.subscribe((customers) => {
@@ -112,5 +112,5 @@ export class CustomerLayoutComponent implements OnDestroy {
         this.customers = [...customers];
       })
     );
-  }
+  }*/
 }

@@ -5,6 +5,7 @@ import { DashboardLayoutComponent } from '../../dashboardComponents/dashboard-la
 import { TeamLayoutComponent } from '../../teamComponents/personnel-layout/personnel-layout.component';
 import { CustomerLayoutComponent } from '../../customerComponents/customer-layout/customer-layout.component';
 import { MenuItems } from '../../models/menuItems.enum';
+import { MenuService } from '../../services/menu/menu.service';
 @Component({
   selector: 'app-main-layout',
   imports: [
@@ -19,9 +20,13 @@ import { MenuItems } from '../../models/menuItems.enum';
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent implements OnInit {
-  currentPage: string = MenuItems.Dashboard;
-  handleMenuSelection(selectedPage: string) {
-    this.currentPage = selectedPage; // Update the current page
+  currentPage!: MenuItems;
+  menuItems = MenuItems;
+
+  constructor(private menuService: MenuService) {}
+  ngOnInit() {
+    this.menuService.currentPage$.subscribe((value: MenuItems) => {
+      this.currentPage = value;
+    });
   }
-  ngOnInit() {}
 }

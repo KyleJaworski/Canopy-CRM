@@ -6,11 +6,13 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  Input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { MenuItems } from '../../models/menuItems.enum';
 import { CustomerService } from '../../services/customer/customer.service';
+import { MenuService } from '../../services/menu/menu.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -26,8 +28,8 @@ export class MenuBarComponent implements OnInit {
   addEmployee!: boolean;
   addCustomer!: boolean;
 
-  @Output() menuOption = new EventEmitter<string>();
-  activeMenuItem: MenuItems = MenuItems.Dashboard;
+  @Input() activeMenuItem!: MenuItems;
+  //@Output() menuOption = new EventEmitter<string>();
 
   // Access the button and menu using template references
   @ViewChild('userMenuButton', { static: true }) userMenuButton!: ElementRef;
@@ -35,7 +37,8 @@ export class MenuBarComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private menuService: MenuService
   ) {}
 
   ngOnInit(): void {
@@ -48,8 +51,7 @@ export class MenuBarComponent implements OnInit {
   }
 
   selectedMenuItem(item: MenuItems) {
-    this.menuOption.emit(item); // Emit the value to the parent component
-    this.activeMenuItem = item; // Update the active menu item
+    this.menuService.setCurrentPage(item);
   }
 
   toggleDropdown() {

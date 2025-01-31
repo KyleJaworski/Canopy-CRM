@@ -8,7 +8,7 @@
 -->
 <div class="min-h-full">
   <div class="bg-gray-800 pb-16">
-    <app-menu-bar (menuOption)="handleMenuSelection($event)"></app-menu-bar>
+    <app-menu-bar [activeMenuItem]="currentPage"></app-menu-bar>
     <header class="py-5">
       <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold tracking-tight text-white">
@@ -22,11 +22,13 @@
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
       <ng-container [ngSwitch]="currentPage">
         <app-dashboard-layout
-          *ngSwitchCase="'Dashboard'"
+          *ngSwitchCase="menuItems.Dashboard"
         ></app-dashboard-layout>
-        <app-team-layout *ngSwitchCase="'Personnel'"></app-team-layout>
+        <app-team-layout *ngSwitchCase="menuItems.Personnel"></app-team-layout>
 
-        <app-customer-layout *ngSwitchCase="'Customers'"></app-customer-layout>
+        <app-customer-layout
+          *ngSwitchCase="menuItems.Customers"
+        ></app-customer-layout>
       </ng-container>
     </div>
   </main>
