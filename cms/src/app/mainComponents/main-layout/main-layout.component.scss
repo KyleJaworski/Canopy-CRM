@@ -1,0 +1,4 @@
+.responsive-img {
+  width: clamp(150px, 40%, 350px);
+  transition: width 0.5s ease-in-out;
+}
