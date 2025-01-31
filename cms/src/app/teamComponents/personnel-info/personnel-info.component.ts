@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -15,6 +16,7 @@ import { TeamRole, Employee } from '../../models/employee';
 import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { SelectModule } from 'primeng/select';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-employee-info',
@@ -22,7 +24,7 @@ import { SelectModule } from 'primeng/select';
   templateUrl: './personnel-info.component.html',
   styleUrl: './personnel-info.component.scss',
 })
-export class EmployeeInfoComponent implements OnChanges {
+export class EmployeeInfoComponent implements OnChanges, OnInit {
   employeeForm!: FormGroup; // Reactive form for employee data
   directReports: any[] = []; // List of direct reports for dropdown
   teamRoles = Object.values(TeamRole); // Extract values from the TeamRole enum
@@ -35,8 +37,11 @@ export class EmployeeInfoComponent implements OnChanges {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private cdr: ChangeDetectorRef
-  ) {
-    this.directReports = this.employeeService.getMockEmployees().map((emp) => ({
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    const employees = await firstValueFrom(this.employeeService.entities$);
+    this.directReports = employees.map((emp) => ({
       name: emp.firstName,
       id: emp.employeeId,
     }));

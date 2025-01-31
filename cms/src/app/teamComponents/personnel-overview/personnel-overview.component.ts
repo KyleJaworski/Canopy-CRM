@@ -23,12 +23,12 @@ interface TreeNode {
 export class EmployeesOverviewComponent implements OnInit {
   platformId = inject(PLATFORM_ID);
   selectedNode = 0;
-  hierarchy: TreeNode[];
+  hierarchy: TreeNode[] = [];
 
   constructor(private employeeService: EmployeeService) {
-    const employees = this.employeeService.getMockEmployees();
-
-    this.hierarchy = this.buildHierarchy(employees, null);
+    this.employeeService.entities$.subscribe((data) => {
+      this.hierarchy = this.buildHierarchy(data, null);
+    });
   }
 
   ngOnInit() {}

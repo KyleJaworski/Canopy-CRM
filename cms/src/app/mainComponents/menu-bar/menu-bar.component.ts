@@ -39,10 +39,10 @@ export class MenuBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
+    this.employeeService.addEntity$.subscribe((value: boolean) => {
       this.addEmployee = value;
     });
-    this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+    this.customerService.addEntity$.subscribe((value: boolean) => {
       this.addCustomer = value;
     });
   }

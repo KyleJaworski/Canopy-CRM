@@ -39,13 +39,13 @@ export class TabBarComponent {
   ngOnInit(): void {
     switch (this.objectType) {
       case ObjectType.Customer: {
-        this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+        this.customerService.addEntity$.subscribe((value: boolean) => {
           this.addObject = value;
         });
         break;
       }
       case ObjectType.Employee: {
-        this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
+        this.employeeService.addEntity$.subscribe((value: boolean) => {
           this.addObject = value;
         });
         break;

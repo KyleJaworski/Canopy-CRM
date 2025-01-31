@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   addDays,
@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import { Meeting } from '../../models/meeting';
 import { MeetingService } from '../../services/meeting/meeting.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-customers-overview',
@@ -17,9 +18,11 @@ import { MeetingService } from '../../services/meeting/meeting.service';
   templateUrl: './customers-overview.component.html',
   styleUrl: './customers-overview.component.scss',
 })
-export class CustomersOverviewComponent implements OnInit {
+export class CustomersOverviewComponent implements OnInit, OnDestroy {
   // Dropdown tracking
   openDropdownIndex: number | null = null;
+
+  private subscriptions: Subscription = new Subscription(); // Manage all subscriptions
 
   // Calendar and date tracking
   calendarDays!: { date: string; dayOfMonth: number; month: number }[];
@@ -53,10 +56,12 @@ export class CustomersOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     // Subscribe to meetings and initialize calendar and filters
-    this.meetingService.mockMeetings$.subscribe((meetings) => {
-      this.meetings = meetings;
-      this.filterMeetingsByMonth();
-    });
+    this.subscriptions.add(
+      this.meetingService.entities$.subscribe((meetings) => {
+        this.meetings = meetings;
+        this.filterMeetingsByMonth();
+      })
+    );
     this.getCalendarDaysForMonth(this.selectedMonth, this.selectedYear);
   }
 
@@ -130,5 +135,9 @@ export class CustomersOverviewComponent implements OnInit {
   private resetSelection(): void {
     this.selectedDate = '';
     this.getCalendarDaysForMonth(this.selectedMonth, this.selectedYear);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe(); // Unsubscribes from all stored subscriptions
   }
 }

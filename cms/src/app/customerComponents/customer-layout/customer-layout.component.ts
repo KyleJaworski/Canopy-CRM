@@ -49,14 +49,14 @@ export class CustomerLayoutComponent implements OnDestroy {
   //On init subscribe to changes in Customers and convert them into a list to be passed to the list component
   ngOnInit(): void {
     this.subscriptions.add(
-      this.customerService.mockCustomers$.subscribe((customers: Customer[]) => {
+      this.customerService.entities$.subscribe((customers: Customer[]) => {
         this.customers = customers;
         this.listItems = updateListItems(customers, ObjectType.Customer);
       })
     );
 
     this.subscriptions.add(
-      this.customerService.addCustomerBool$.subscribe((value: boolean) => {
+      this.customerService.addEntity$.subscribe((value: boolean) => {
         this.addCustomer = value;
       })
     );
@@ -92,7 +92,7 @@ export class CustomerLayoutComponent implements OnDestroy {
   fetchCustomers(): void {
     // Update customers and listItems whenever customers change
     this.subscriptions.add(
-      this.customerService.mockCustomers$.subscribe((customers) => {
+      this.customerService.entities$.subscribe((customers) => {
         // Check if the selectedCustomer still exists in the customers list
         if (this.selectedCustomer) {
           const isSelectedcustomerValid = customers.some(

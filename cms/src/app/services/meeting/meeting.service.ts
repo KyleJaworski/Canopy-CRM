@@ -1,63 +1,81 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { Meeting } from '../../models/meeting';
+import { EntityService } from '../entity/entity.service';
 import { CustomerService } from '../customer/customer.service';
 import { Customer } from '../../models/customer';
 import { format } from 'date-fns';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MeetingService {
-  private addMeetingBool = new BehaviorSubject<boolean>(false); // Default value is false
-  private mockMeetingsSubject = new BehaviorSubject<Meeting[]>([]);
-
-  // Observable for components to subscribe to
-  addMeetingBool$ = this.addMeetingBool.asObservable();
-  mockMeetings$ = this.mockMeetingsSubject.asObservable();
-
+export class MeetingService extends EntityService<Meeting> {
   constructor(private customerService: CustomerService) {
-    if (this.isBrowser()) {
-      // Load meetings from sessionStorage
-      const storedMeetings = sessionStorage.getItem('mockMeetings');
-      const initialMeetings = storedMeetings
-        ? JSON.parse(storedMeetings, (key, value) =>
-            key === 'date' ? new Date(value) : value
-          )
-        : this.getDefaultMockMeetings();
+    // Initialize the service with an empty list
+    super('mockMeetings', []);
 
-      // If no stored meetings exist, save defaults
-      if (!storedMeetings) {
-        this.saveToSessionStorage(initialMeetings);
+    // Fetch customers asynchronously and initialize meetings
+    this.initializeMeetings();
+  }
+
+  private async initializeMeetings(): Promise<void> {
+    try {
+      // Wait for customers to be available
+      const customers: Customer[] = await firstValueFrom(
+        this.customerService.entities$
+      );
+
+      // Ensure we have enough customers
+      if (customers.length < 4) {
+        console.warn('Not enough customers to initialize meetings');
+        return;
       }
 
-      // Emit the initial meetings to the BehaviorSubject
-      this.mockMeetingsSubject.next(initialMeetings);
+      // Define meetings using retrieved customers
+      const defaultMeetings: Meeting[] = [
+        {
+          meetingId: 1,
+          customer: customers[0],
+          date: format(new Date(2025, 0, 24), 'yyyy-MM-dd'),
+          displayDate: MeetingService.formatDate(new Date(2025, 0, 24)),
+          location: 'Starbucks',
+        },
+        {
+          meetingId: 2,
+          customer: customers[1],
+          date: format(new Date(2025, 0, 27), 'yyyy-MM-dd'),
+          displayDate: MeetingService.formatDate(new Date(2025, 0, 27)),
+          location: 'Starbucks',
+        },
+        {
+          meetingId: 3,
+          customer: customers[2],
+          date: format(new Date(2025, 1, 1), 'yyyy-MM-dd'),
+          displayDate: MeetingService.formatDate(new Date(2025, 1, 1)),
+          location: 'Starbucks',
+        },
+        {
+          meetingId: 4,
+          customer: customers[3],
+          date: format(new Date(2025, 1, 3), 'yyyy-MM-dd'),
+          displayDate: MeetingService.formatDate(new Date(2025, 1, 3)),
+          location: 'Starbucks',
+        },
+      ];
+
+      // Set the entities inside EntityService
+      this.setEntities(defaultMeetings);
+    } catch (error) {
+      console.error('Error fetching customers for meetings:', error);
     }
   }
 
-  // Utility function to save meetings to sessionStorage
-  private saveToSessionStorage(meetings: Meeting[]): void {
-    if (this.isBrowser()) {
-      sessionStorage.setItem('mockMeetings', JSON.stringify(meetings));
-    }
-  }
-
-  // Check if code is running in the browser
-  private isBrowser(): boolean {
-    return (
-      typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'
-    );
-  }
-
-  // Method to toggle or update the state
   flipAddMeeting(): void {
-    this.addMeetingBool.next(!this.addMeetingBool.value);
+    this.setAddEntityState(!this.getAddEntityState());
   }
 
-  updateMeeting(meetingToUpdate: Meeting) {
-    const currentMeetings = this.mockMeetingsSubject.value; // Get the current value of mockCustomers
-
+  updateMeeting(meetingToUpdate: Meeting): void {
+    const currentMeetings = this.getEntities();
     const index = currentMeetings.findIndex(
       (meeting) => meeting.meetingId === meetingToUpdate.meetingId
     );
@@ -69,84 +87,32 @@ export class MeetingService {
         ...meetingToUpdate,
       };
 
-      // Emit the updated Customers array
-      this.mockMeetingsSubject.next(updatedMeetings);
-
-      // Save to sessionStorage if in the browser
-      if (this.isBrowser()) {
-        sessionStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
-      }
+      this.setEntities(updatedMeetings);
     }
   }
 
   addMeeting(newMeeting: Meeting): void {
-    const currentMeetings = this.mockMeetingsSubject.value;
-    const updatedMeetings = [...currentMeetings, newMeeting];
-
-    // Emit the updated array and save to sessionStorage
-    this.mockMeetingsSubject.next(updatedMeetings);
-
-    if (this.isBrowser()) {
-      sessionStorage.setItem('mockMeetings', JSON.stringify(updatedMeetings));
-    }
+    this.setEntities([...this.getEntities(), newMeeting]);
   }
 
-  getMockMeetings(): Meeting[] {
-    return this.mockMeetingsSubject.value; // Get the current value of mockCustomers
+  deleteMeeting(meeting: Meeting): void {
+    this.setEntities(
+      this.getEntities().filter((m) => m.meetingId !== meeting.meetingId)
+    );
   }
 
   generateUniqueMeetingId(): number {
-    const currentMeetings = this.getMockMeetings(); // Get current Customers
-    const existingIds = new Set(currentMeetings.map((cust) => cust.meetingId)); // Store all existing IDs in a Set
-
+    const existingIds = new Set(
+      this.getEntities().map((meeting) => meeting.meetingId)
+    );
     let newId: number;
-
-    // Generate a new ID until it's unique
     do {
-      newId = Math.floor(Math.random() * 10000) + 1; // Random number between 1 and 10000
+      newId = Math.floor(Math.random() * 10000) + 1;
     } while (existingIds.has(newId));
-
     return newId;
   }
 
-  // Default mockCustomers
-  private getDefaultMockMeetings(): Meeting[] {
-    const customers: Customer[] = this.customerService.getMockCustomers();
-
-    return [
-      {
-        meetingId: 1,
-        customer: customers[0],
-        date: format(new Date(2025, 0, 24), 'yyyy-MM-dd'), // Use Date(year, month, day)
-        displayDate: this.formatDate(new Date(2025, 0, 24)),
-        location: 'Starbucks',
-      },
-      {
-        meetingId: 2,
-        customer: customers[1],
-        date: format(new Date(2025, 0, 27), 'yyyy-MM-dd'),
-        displayDate: this.formatDate(new Date(2025, 0, 27)),
-        location: 'Starbucks',
-      },
-      {
-        meetingId: 3,
-        customer: customers[2],
-        date: format(new Date(2025, 1, 1), 'yyyy-MM-dd'),
-        displayDate: this.formatDate(new Date(2025, 1, 1)),
-        location: 'Starbucks',
-      },
-      {
-        meetingId: 4,
-        customer: customers[3],
-        date: format(new Date(2025, 1, 3), 'yyyy-MM-dd'),
-        displayDate: this.formatDate(new Date(2025, 1, 3)),
-        location: 'Starbucks',
-      },
-    ];
-  }
-
-  // Helper function to format the date
-  formatDate(date: Date): string {
+  private static formatDate(date: Date): string {
     const day = date.getDate();
     const month = date.toLocaleString('en-US', { month: 'long' });
     const year = date.getFullYear();

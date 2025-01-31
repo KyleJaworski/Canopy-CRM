@@ -43,7 +43,7 @@ export class TeamLayoutComponent implements OnDestroy {
   ngOnInit(): void {
     // Handle changes to addEmployee state
     this.subscriptions.add(
-      this.employeeService.addEmployeeBool$.subscribe((value: boolean) => {
+      this.employeeService.addEntity$.subscribe((value: boolean) => {
         this.selectedEmployee = this.selectedEmployee;
         this.addEmployee = value;
       })
@@ -85,7 +85,7 @@ export class TeamLayoutComponent implements OnDestroy {
   fetchEmployees(): void {
     // Update employees and listItems whenever employees change
     this.subscriptions.add(
-      this.employeeService.mockEmployees$.subscribe((employees) => {
+      this.employeeService.entities$.subscribe((employees) => {
         // Check if the selectedEmployee still exists in the employees list
         if (this.selectedEmployee) {
           const isSelectedEmployeeValid = employees.some(
