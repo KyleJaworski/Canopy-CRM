@@ -2,3 +2,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --p-organizationchart-node-background: #ffffff !important;
+  --p-organizationchart-node-hover-background: #f1f5f9 !important;
+  --p-organizationchart-node-border-color: #e2e8f0 !important;
+  --p-organizationchart-node-color: #334155 !important;
+  --p-organizationchart-node-hover-color: #334155 !important;
+  --p-organizationchart-node-selected-color: #047857 !important;
+}
