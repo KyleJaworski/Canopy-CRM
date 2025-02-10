@@ -28,10 +28,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
   //Takes in preformated ListItem[]
   @Input() listItems: ListItem[] = [];
   //Outputs selected item back to parent
-  @Output() selectedlistItem = new EventEmitter<ListItem>();
-
   selectedItem!: ListItem | null;
-
   constructor(
     private stateService: StateService,
     private customerService: CustomerService,
@@ -39,14 +36,16 @@ export class PersonListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.listItems);
+    // ✅ Find the first selected item in the list
+    this.selectedItem = this.listItems.find((item) => item.isSelected) || null;
   }
+
   ngOnDestroy(): void {
     if (this.selectedItem) {
       this.onSelectItem(this.selectedItem);
     }
   }
-
+  /*
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['listItems'] && this.selectedItem) {
       const selectedItem = this.listItems.find(
@@ -55,7 +54,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
 
       this.selectedlistItem.emit(selectedItem);
     }
-  }
+  }*/
 
   onSelectItem(listItem: ListItem): void {
     if (listItem.objectType === ObjectType.Customer) {
@@ -66,14 +65,13 @@ export class PersonListComponent implements OnInit, OnDestroy {
       }
 
       if (this.selectedItem?.id === customer.customerId) {
-        console.log(customer);
         this.stateService.clearSelection(); // ✅ Clear if already selected
         this.selectedItem = null;
       } else {
         this.stateService.setSelectedObject(
           ViewableObjectType.Customer,
           customer
-        ); // ✅ Set if new
+        );
         this.selectedItem = listItem;
       }
     }
@@ -82,26 +80,25 @@ export class PersonListComponent implements OnInit, OnDestroy {
       const employee = this.employeeService.getEmployeeById(listItem.id);
 
       if (!employee) {
-        return; // ✅ Do nothing if the customer is not found
+        return; // ✅ Do nothing if the employee is not found
       }
 
       if (this.selectedItem?.id === employee.employeeId) {
-        console.log(employee);
         this.stateService.clearSelection(); // ✅ Clear if already selected
         this.selectedItem = null;
       } else {
         this.stateService.setSelectedObject(
           ViewableObjectType.Employee,
           employee
-        ); // ✅ Set if new
+        );
         this.selectedItem = listItem;
       }
     }
 
-    /* this.selectedItem == listItem
-      ? (this.selectedItem = null)
-      : (this.selectedItem = listItem);
-
-    this.selectedlistItem.emit(listItem);*/
+    // ✅ Update `isSelected` property for all list items
+    this.listItems = this.listItems.map((item) => ({
+      ...item,
+      isSelected: item.id === this.selectedItem?.id, // ✅ True for selected item, false for others
+    }));
   }
 }

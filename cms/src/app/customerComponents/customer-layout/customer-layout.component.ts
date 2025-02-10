@@ -49,6 +49,14 @@ export class CustomerLayoutComponent implements OnDestroy {
       this.customerService.entities$.subscribe((customers: Customer[]) => {
         this.customers = customers;
         this.listItems = updateListItems(customers, ObjectType.Customer);
+
+        // ✅ Ensure `selectedCustomer` exists before updating `listItems`
+        if (this.selectedCustomer) {
+          this.listItems = this.listItems.map((listItem) => ({
+            ...listItem,
+            isSelected: listItem.id === this.selectedCustomer?.customerId, // ✅ Set active where IDs match
+          }));
+        }
       })
     );
 

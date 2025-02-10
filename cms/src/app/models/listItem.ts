@@ -20,6 +20,7 @@ export interface ListItem {
   additionalLabel?: string;
   objectType?: ObjectType;
   isActive: boolean;
+  isSelected: boolean;
 }
 
 export function updateListItems(
@@ -64,6 +65,7 @@ export function updateListItems(
         additionalLabel: timeSinceAdded,
         objectType: ObjectType.Customer,
         isActive: customer.isActive,
+        isSelected: false,
       };
     } else if (objectType === ObjectType.Employee) {
       const employee = item as Employee;
@@ -75,6 +77,7 @@ export function updateListItems(
         additionalLabel: employee.jobTitle || '',
         objectType: ObjectType.Employee,
         isActive: employee.isActive,
+        isSelected: false,
       };
     } else {
       throw new Error('Invalid item or objectType provided');
