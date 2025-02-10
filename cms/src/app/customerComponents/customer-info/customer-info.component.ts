@@ -43,7 +43,6 @@ export class CustomerInfoComponent implements OnChanges {
       this.customerForm.reset({
         firstName: '',
         lastName: '',
-
         email: '',
         phoneNumber: '',
         streetAddress: '',

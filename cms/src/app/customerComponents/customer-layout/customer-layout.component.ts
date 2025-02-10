@@ -1,12 +1,7 @@
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
-import {
-  Component,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { Customer } from '../../models/customer';
 import { CustomerService } from '../../services/customer/customer.service';
@@ -15,6 +10,8 @@ import { CustomersOverviewComponent } from '../customers-overview/customers-over
 import { TabBarComponent } from '../../generalComponents/tab-bar/tab-bar.component';
 import { CustomerInfoComponent } from '../customer-info/customer-info.component';
 import { TabItem } from '../../models/tabItems';
+import { StateService } from '../../services/state/state.service';
+import { ViewableObjectType } from '../../models/viewableObjects';
 
 @Component({
   selector: 'app-customer-layout',
@@ -31,7 +28,7 @@ import { TabItem } from '../../models/tabItems';
 })
 export class CustomerLayoutComponent implements OnDestroy {
   addCustomer: boolean = false;
-  selectedCustomer: Customer | null = null;
+  @Input() selectedCustomer: Customer | null = null;
   listItems: ListItem[] = [];
   customers!: Customer[];
   objectType: ObjectType = ObjectType.Customer;
@@ -60,7 +57,6 @@ export class CustomerLayoutComponent implements OnDestroy {
         this.addCustomer = value;
       })
     );
-    //this.fetchCustomers();
   }
 
   ngOnDestroy(): void {
@@ -70,19 +66,18 @@ export class CustomerLayoutComponent implements OnDestroy {
     if (this.addCustomer === true) this.customerService.flipAddCustomer();
   }
 
-  //When list item selected find customer who matches list item ID
+  //When list item selected find customer who matches list item I
+  /*
   onSelectedCustomerRecieved(listItem: ListItem | null): void {
     if (listItem) {
       const customer = this.customers.find(
         (cust) => cust.customerId === listItem.id
       );
-      this.selectedCustomer =
-        this.selectedCustomer === customer ? null : customer || null;
+      this.selectedCustomer = customer as Customer;
     } else {
-      this.selectedCustomer = null;
+      this.stateService.clearSelection();
     }
-    console.log(this.selectedCustomer);
-  }
+  }*/
 
   // Handle tab selection
   handleTabSelection(selectedTab: TabItem): void {

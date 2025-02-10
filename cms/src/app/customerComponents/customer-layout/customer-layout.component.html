@@ -16,10 +16,7 @@
       </div>
     </ng-container>
     <ng-container #elseBlock>
-      <app-person-list
-        (selectedlistItem)="onSelectedCustomerRecieved($event)"
-        [listItems]="listItems"
-      ></app-person-list>
+      <app-person-list [listItems]="listItems"></app-person-list>
     </ng-container>
   </div>
 

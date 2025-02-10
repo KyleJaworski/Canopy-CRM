@@ -1,46 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Employee, TeamRole } from '../../models/employee';
 import { EntityService } from '../entity/entity.service';
+import { StateService } from '../state/state.service';
+import { ViewableObjectType } from '../../models/viewableObjects';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService extends EntityService<Employee> {
-  constructor() {
-    super('mockEmployees', [
-      {
-        employeeId: 1,
-        directReportId: null,
-        firstName: 'Jarek',
-        lastName: 'Tree Daddie',
-        jobTitle: 'CEO',
-        teamRole: TeamRole.Executive,
-        email: 'jarekbobarek@treedaddies.com',
-        phoneNumber: '765-458-7519',
-        address: {
-          street: '1234 Elm St',
-          city: 'Springfield',
-          postalCode: '12345',
+  constructor(private stateService: StateService) {
+    super(
+      'mockEmployees',
+      [
+        {
+          employeeId: 1,
+          directReportId: null,
+          firstName: 'Jarek',
+          lastName: 'Tree Daddie',
+          jobTitle: 'CEO',
+          teamRole: TeamRole.Executive,
+          email: 'jarekbobarek@treedaddies.com',
+          phoneNumber: '765-458-7519',
+          address: {
+            street: '1234 Elm St',
+            city: 'Springfield',
+            postalCode: '12345',
+          },
+          isActive: true,
         },
-        isActive: true,
-      },
-      {
-        employeeId: 2,
-        directReportId: 1,
-        firstName: 'Britt',
-        lastName: 'Flourladie',
-        jobTitle: 'Scheduler',
-        teamRole: TeamRole.Coordinator,
-        email: 'info@treedaddies.com',
-        phoneNumber: '465-754-7958',
-        address: {
-          street: '23542 Harrow Road',
-          city: 'Lafayette',
-          postalCode: '43211',
+        {
+          employeeId: 2,
+          directReportId: 1,
+          firstName: 'Britt',
+          lastName: 'Flourladie',
+          jobTitle: 'Scheduler',
+          teamRole: TeamRole.Coordinator,
+          email: 'info@treedaddies.com',
+          phoneNumber: '465-754-7958',
+          address: {
+            street: '23542 Harrow Road',
+            city: 'Lafayette',
+            postalCode: '43211',
+          },
+          isActive: true,
         },
-        isActive: true,
-      },
-    ]);
+      ],
+      'employeeId'
+    );
   }
 
   flipAddEmployee(): void {
@@ -49,6 +55,10 @@ export class EmployeeService extends EntityService<Employee> {
 
   deactivateEmployee(emp: Employee): void {
     this.updateEmployee({ ...emp, isActive: false });
+  }
+
+  getEmployeeById(id: number): Employee | undefined {
+    return this.getEntityById(id);
   }
 
   activateEmployee(emp: Employee): void {
@@ -68,6 +78,11 @@ export class EmployeeService extends EntityService<Employee> {
         ...employeeToUpdate,
       };
       this.setEntities(updatedEmployees);
+      const updatedCustomer = updatedEmployees[index];
+      this.stateService.setSelectedObject(
+        ViewableObjectType.Employee,
+        updatedCustomer
+      );
     }
   }
 
@@ -81,6 +96,7 @@ export class EmployeeService extends EntityService<Employee> {
         (employee) => employee.employeeId !== emp.employeeId
       )
     );
+    this.stateService.clearSelection();
   }
 
   generateUniqueEmployeeId(): number {

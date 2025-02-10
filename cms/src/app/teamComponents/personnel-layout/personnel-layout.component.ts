@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonListComponent } from '../../generalComponents/person-list/person-list.component';
 import { EmployeeInfoComponent } from '../personnel-info/personnel-info.component';
@@ -7,8 +7,11 @@ import { EmployeesOverviewComponent } from '../personnel-overview/personnel-over
 import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../../models/employee';
 import { TabItem } from '../../models/tabItems';
+import { filter, map, startWith } from 'rxjs/operators';
 import { ListItem, updateListItems, ObjectType } from '../../models/listItem';
 import { Subscription } from 'rxjs';
+import { StateService } from '../../services/state/state.service';
+import { ViewableObjectType } from '../../models/viewableObjects';
 
 @Component({
   selector: 'app-team-layout',
@@ -24,7 +27,7 @@ import { Subscription } from 'rxjs';
 })
 export class TeamLayoutComponent implements OnDestroy {
   // State variables
-  selectedEmployee: Employee | null = null;
+  @Input() selectedEmployee: Employee | null = null;
   addEmployee: boolean = false;
   employees: Employee[] = [];
   listItems: ListItem[] = [];
@@ -38,7 +41,10 @@ export class TeamLayoutComponent implements OnDestroy {
   ];
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private stateService: StateService
+  ) {}
 
   ngOnInit(): void {
     // Handle changes to addEmployee state
@@ -66,20 +72,6 @@ export class TeamLayoutComponent implements OnDestroy {
   // Check if a tab is active
   isTabActive(tab: TabItem): boolean {
     return tab.active;
-  }
-
-  // Handle selected employee from list
-  onSelectedEmployeeRecieved(listItem: ListItem | null): void {
-    if (listItem) {
-      const employee = this.employees.find(
-        (emp) => emp.employeeId === listItem.id
-      );
-
-      this.selectedEmployee =
-        this.selectedEmployee === employee ? null : employee || null;
-    } else {
-      this.selectedEmployee = null;
-    }
   }
 
   fetchEmployees(): void {

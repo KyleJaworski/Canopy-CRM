@@ -12,7 +12,11 @@ export abstract class EntityService<T> {
   entities$ = this.entitiesSubject.asObservable();
   addEntity$ = this.addEntitySubject.asObservable();
 
-  constructor(private storageKey: string, private defaultEntities: T[]) {
+  constructor(
+    private storageKey: string,
+    private defaultEntities: T[],
+    private idKey: keyof T
+  ) {
     if (this.isBrowser()) {
       const storedEntities = sessionStorage.getItem(this.storageKey);
       const initialEntities = storedEntities
@@ -44,6 +48,10 @@ export abstract class EntityService<T> {
 
   protected getAddEntityState(): boolean {
     return this.addEntitySubject.getValue();
+  }
+
+  protected getEntityById(entityId: number): T | undefined {
+    return this.getEntities().find((entity) => entity[this.idKey] === entityId);
   }
 
   private saveToSessionStorage(entities: T[]): void {

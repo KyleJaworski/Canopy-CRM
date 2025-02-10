@@ -24,10 +24,14 @@
         <app-dashboard-layout
           *ngSwitchCase="menuItems.Dashboard"
         ></app-dashboard-layout>
-        <app-team-layout *ngSwitchCase="menuItems.Personnel"></app-team-layout>
+        <app-team-layout
+          *ngSwitchCase="menuItems.Personnel"
+          [selectedEmployee]="employeeToView"
+        ></app-team-layout>
 
         <app-customer-layout
           *ngSwitchCase="menuItems.Customers"
+          [selectedCustomer]="customerToView"
         ></app-customer-layout>
         <div
           *ngSwitchCase="menuItems.Reports"

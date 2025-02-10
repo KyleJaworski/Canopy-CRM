@@ -12,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 export class MeetingService extends EntityService<Meeting> {
   constructor(private customerService: CustomerService) {
     // Initialize the service with an empty list
-    super('mockMeetings', []);
+    super('mockMeetings', [], 'meetingId');
 
     // Fetch customers asynchronously and initialize meetings
     this.initializeMeetings();

@@ -17,10 +17,7 @@
     </ng-container>
 
     <ng-container #elseBlock>
-      <app-person-list
-        [listItems]="listItems"
-        (selectedlistItem)="onSelectedEmployeeRecieved($event)"
-      ></app-person-list>
+      <app-person-list [listItems]="listItems"></app-person-list>
     </ng-container>
   </div>
   <!--Either Org Chart or Customer Info-->

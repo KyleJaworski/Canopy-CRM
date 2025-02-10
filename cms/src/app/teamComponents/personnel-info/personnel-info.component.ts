@@ -37,7 +37,9 @@ export class EmployeeInfoComponent implements OnChanges, OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.initializeForm();
+  }
 
   async ngOnInit(): Promise<void> {
     const employees = await firstValueFrom(this.employeeService.entities$);
@@ -45,7 +47,6 @@ export class EmployeeInfoComponent implements OnChanges, OnInit {
       name: emp.firstName,
       id: emp.employeeId,
     }));
-    this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

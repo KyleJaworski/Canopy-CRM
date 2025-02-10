@@ -126,17 +126,4 @@ export class TabBarComponent {
         break;
     }
   }
-
-  deactivateObject(editObject: ObjectType, object: Employee | Customer): void {
-    switch (editObject) {
-      case ObjectType.Employee:
-        //this.employeeService.deactivateEmployee();
-        break;
-      case ObjectType.Customer:
-        //this.customerService.deactivateCustomer();
-        break;
-      default:
-        break;
-    }
-  }
 }
