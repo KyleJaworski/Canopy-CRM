@@ -33,6 +33,8 @@
           *ngSwitchCase="menuItems.Customers"
           [selectedCustomer]="customerToView"
         ></app-customer-layout>
+        <app-schedule-layout *ngSwitchCase="menuItems.Schedule">
+        </app-schedule-layout>
         <div
           *ngSwitchCase="menuItems.Reports"
           class="flex justify-center items-center -mt-1 mt-36"

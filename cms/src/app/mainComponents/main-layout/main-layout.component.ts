@@ -4,6 +4,7 @@ import { MenuBarComponent } from '../menu-bar/menu-bar.component';
 import { DashboardLayoutComponent } from '../../dashboardComponents/dashboard-layout/dashboard-layout.component';
 import { TeamLayoutComponent } from '../../teamComponents/personnel-layout/personnel-layout.component';
 import { CustomerLayoutComponent } from '../../customerComponents/customer-layout/customer-layout.component';
+import { ScheduleLayoutComponent } from '../../scheduleComponents/schedule-layout/schedule-layout.component';
 import { MenuItems } from '../../models/menuItems.enum';
 import { MenuService } from '../../services/menu/menu.service';
 import { StateService } from '../../services/state/state.service';
@@ -24,6 +25,7 @@ import { map, startWith } from 'rxjs/operators';
     TeamLayoutComponent,
 
     CustomerLayoutComponent,
+    ScheduleLayoutComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',

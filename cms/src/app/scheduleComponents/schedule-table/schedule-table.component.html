@@ -1,0 +1,121 @@
+<div class="">
+  <!--Calender-->
+  <div
+    class="mt-10 text-center lg:col-start-6 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-7"
+  >
+    <div class="flex items-center text-gray-900">
+      <button
+        type="button"
+        (click)="monthDown()"
+        class="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+      >
+        <span class="sr-only">Previous month</span>
+        <svg
+          class="size-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+          data-slot="icon"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <div class="flex-auto text-sm font-semibold">
+        {{ monthNames[selectedMonth] }} - {{ selectedYear }}
+      </div>
+      <button
+        type="button"
+        (click)="monthUp()"
+        class="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+      >
+        <span class="sr-only">Next month</span>
+        <svg
+          class="size-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+          data-slot="icon"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+    <!--Day of Week-->
+    <div class="mt-6 grid grid-cols-7 text-xs/6 text-gray-500">
+      <div>M</div>
+      <div>T</div>
+      <div>W</div>
+      <div>T</div>
+      <div>F</div>
+      <div>S</div>
+      <div>S</div>
+    </div>
+    <div
+      class="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200"
+    >
+      <!--Calendar Date-->
+      <button
+        *ngFor="let day of calendarDays; let i = index"
+        (click)="setSelectedDate(day)"
+        [ngClass]="{
+              'bg-white text-gray-900 font-semibold': isSelectedMonth(day.month),
+              'bg-gray-50 text-gray-400': !isSelectedMonth(day.month),
+              'text-indigo-600 font-extraboldbold': today === day.date,
+              'text-white': selectedDate === day.date,
+              'rounded-tl-lg' : i === 0,
+              'rounded-tr-lg' : i === 6,
+              'rounded-bl-lg' : (calendarDays.length ===  35 && i === 28) || (calendarDays.length ===  42 && i === 35),
+              'rounded-br-lg' : (calendarDays.length === 35 && i === 34) || (calendarDays.length === 42 && i === 41),
+            }"
+        [ngClass]=""
+        type="button"
+        class="py-1.5 hover:bg-gray-100 focus:z-10 relative"
+      >
+        <time
+          [attr.datetime]="day.date"
+          [ngClass]="{
+                'bg-gray-900': selectedDate === day.date,
+                'bg-indigo-600': selectedDate === day.date && today === day.date,
+              }"
+          class="mx-auto flex size-7 items-center justify-center rounded-full"
+          >{{ day.dayOfMonth }}</time
+        >
+        <span
+          *ngIf="isScheduled(day.date)"
+          class="absolute top-1 right-1 h-1 w-1 rounded-full bg-red-500"
+        ></span>
+      </button>
+    </div>
+  </div>
+  <!--Customer Meetings-->
+  <!--<
+      <div
+        *ngIf="meetingsInSelectedMonth.length === 0; elseBlock"
+        class="mt-4 flex flex-col items-center justify-center text-sm/6 lg:col-span-5 xl:col-span-6"
+      >
+        <div
+          class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow w-full max-w-md"
+        >
+          div class="px-4 py-5 sm:p-6 text-center">
+            There is nothing scheduled for the selected date.
+          </div>
+          <div class="px-4 py-4 sm:px-6 flex justify-center">
+            <img
+              src="assets/images/calendar.png"
+              alt="Appointment Icon"
+              class="block"
+              style="width: 100px; height: 100px"
+            />
+          </div>
+        </div>
+      </div>
+  -->
+</div>
